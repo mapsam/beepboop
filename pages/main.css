@@ -1,0 +1,40 @@
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;500;600;700&display=swap');
+
+* {
+  font-family: 'Inconsolata', monospace;
+}
+*:focus {
+  outline: 0;
+}
+textarea {
+  border: none;
+  overflow: auto;
+  outline: none;
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  resize: none; /*remove the resize handle on the bottom right*/
+}
+button {
+  background-color: #f012be;
+}
+button:hover {
+  cursor: pointer;
+  background-color: #b5078e;
+}
+
+.Layout {
+  display: 'block';
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.day-select-input {
+  font-size: 1.3em;
+  border: none;
+}
+.day-select-input:focus {
+  caret-color: transparent;
+}
+.day-select-calendar {}

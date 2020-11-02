@@ -1,0 +1,38 @@
+{
+  "name": "day",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "next dev",
+    "start:db": "brew services start mongodb-community",
+    "stop:db": "brew services stop mongodb-community",
+    "db:test": "mongoimport --db daytest --collection days --drop --file ./test/fixtures/days.json",
+    "db:sam": "mongoimport --db daytest --collection days --drop --file ./data/days.json"
+  },
+  "bin": {
+    "image": "./bin/image.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mapsam/day.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mapsam/day/issues"
+  },
+  "homepage": "https://github.com/mapsam/day#readme",
+  "dependencies": {
+    "image-type": "^4.1.0",
+    "mongodb": "^3.6.2",
+    "next": "^10.0.0",
+    "react": "^17.0.1",
+    "react-datepicker": "^3.3.0",
+    "react-dom": "^17.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
