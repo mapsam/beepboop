@@ -23,6 +23,13 @@ const dayPermalinkStyle = {
   textDecoration: 'none'
 };
 
+const editDayStyle = {
+  color: '#c0c0c0',
+  fontWeight: '700',
+  marginLeft: '20px',
+  textDecoration: 'none'
+};
+
 const dayTextStyle = {
   marginTop: '7px',
   fontSize: '1.15em',
@@ -31,9 +38,11 @@ const dayTextStyle = {
 }
 
 const Day = props => {
-  const permalink = `/days/${props.children.account}?year=${props.children.year}&month=${props.children.month}&day=${props.children.day}`;
+  const query = `?year=${props.children.year}&month=${props.children.month}&day=${props.children.day}`;
+  const permalink = `/days?${query}`;
+  const editlink = `/edit?${query}`;
   return (
-    <div className="Day" style={dayStyle} key={props.children.id}>
+    <div className="Day" style={dayStyle} key={props.children._id}>
       <div style={dayDateStyle}>
         <span className="DayYear">{props.children.year}</span>
         <span style={dayDateSpacerStyle}>/</span>
@@ -41,6 +50,7 @@ const Day = props => {
         <span style={dayDateSpacerStyle}>/</span>
         <span className="DayDay">{props.children.day}</span>
         <a style={dayPermalinkStyle} href={permalink}>#</a>
+        <a style={editDayStyle} href={editlink}>edit</a>
       </div>
       <p style={dayTextStyle}>{props.children.text}</p>
     </div>

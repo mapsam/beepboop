@@ -1,7 +1,10 @@
 import { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { useRouter } from 'next/router';
+import { getSession } from 'next-auth/client';
+import { connectToDatabase } from '../utils/mongodb.js';
 import 'react-datepicker/dist/react-datepicker.css';
+
 
 const formTextAreaStyle = {
   width: '100%',
@@ -23,9 +26,40 @@ const buttonStyle = {
   borderRadius: '10px'
 };
 
-const Account = ({ days }) => {
+export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  const { db } = await connectToDatabase();
+
+  console.log('edits');
+
+  if (!context.query.year || !context.query.month || !context.query.day) {
+    return { props: { error: 'No year/month/day specified.' }};
+  }
+  if (!session && !session.userId) {
+    return { props: { error: 'User is not logged in.' } };
+  }
+
+  const params = {
+    year: +context.query.year,
+    month: +context.query.month,
+    day: +context.query.day,
+    userId: session.userId
+  };
+
+  console.log(params);
+
+  const days = await db.collection('days')
+    .find(params, { projection: { createdAt: 0, updatedAt: 0 }})
+    .toArray();
+
+  console.log(days);
+
+  return { props: { dayText: days[0].text } };
+}
+
+const Account = ({ dayText }) => {
   const router = useRouter()
-  const [content, setContent] = useState('');
+  const [content, setContent] = useState(dayText);
   const [dayDate, setDayDate] = useState(new Date());
 
   const submitDay = async (e) => {
@@ -33,7 +67,7 @@ const Account = ({ days }) => {
 
     const body = {
       year: dayDate.getFullYear(),
-      month: dayDate.getMonth() + 1,
+      month: dayDate.getMonth(),
       day: dayDate.getDate(),
       weekday: dayDate.getDay(),
       text: content
@@ -63,7 +97,7 @@ const Account = ({ days }) => {
 
         <textarea
           style={formTextAreaStyle}
-          placeholder='What did you do today?'
+          value={dayText}
           onChange={(e) => setContent(e.target.value)}>
         </textarea>
 

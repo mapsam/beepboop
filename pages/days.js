@@ -1,18 +1,22 @@
 import Day from '../components/Day.js';
 import { connectToDatabase } from '../utils/mongodb.js';
+import { getSession } from 'next-auth/client';
 
 export async function getServerSideProps(context) {
+  const session = await getSession(context);
+  if (!session) return { props: { days: [] }};
+
   const { db } = await connectToDatabase();
 
   const date = new Date();
   const params = {
-    account: context.params.account
+    userId: session.userId
   };
 
   // if no params provided, default to showing all days in current month
   if (!Object.keys(context.query).length) {
     params.year = +date.getFullYear();
-    params.month = +date.getMonth();
+    params.month = +date.getMonth() + 1;
   }
 
   if (context.query.year) params.year = +context.query.year;
@@ -21,14 +25,14 @@ export async function getServerSideProps(context) {
   if (context.query.weekday) params.weekday = +context.query.weekday;
 
   const days = await db.collection('days')
-    .find(params, { projection: { _id: 0 }})
+    .find(params, { projection: { createdAt: 0, updatedAt: 0 }})
     .sort({ year: -1, month: -1, day: -1 })
     .toArray();
 
   return { props: { days } };
 }
 
-const Account = ({ days }) => {
+const Page = ({ days }) => {
   return (
     <div>
       {days.map((day) => (
@@ -38,4 +42,4 @@ const Account = ({ days }) => {
   );
 };
 
-export default Account;
+export default Page;

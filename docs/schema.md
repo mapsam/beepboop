@@ -22,7 +22,7 @@ List days for an account. Defaults to all days within the current month.
 
 ```
 {
-  "_id": "string",
+  "_id": ObjectId("asdf"),
   "created": "date",
   "modified": "date",
   "year": "int",
@@ -47,6 +47,19 @@ Indexes
 * weekday
 * account
 
+### users
+
+```
+{
+  "_id" : ObjectId("asdf"),
+  "name" : "Leslie Knope",
+  "email" : "leslie.knope@gmail.com",
+  "image" : "https://lh3.googleusercontent.com/...",
+  "createdAt" : ISODate("2020-11-07T01:30:52.997Z")
+  "updatedAt" : ISODate("2020-11-07T01:30:52.997Z")
+}
+```
+
 ### images
 
 `Image`
@@ -67,18 +80,6 @@ Indexes
   "date": "date",
   "text": "string",
   "location": "object<Location>"
-}
-```
-
-### account
-
-`Account`
-
-```
-{
-  "_id": "...",
-  "name": "string",
-  "default_location": "object<Location>"
 }
 ```
 

@@ -1,12 +1,13 @@
-'use strict';
-
 import './main.css';
 import Layout from '../components/Layout.js';
+import { Provider } from 'next-auth/client'
 
-export default function MyApp({ Component, pageProps }) {
+export default function App({ Component, pageProps }) {
   return (
-    <Layout>
-      <Component {...pageProps} />
-    </Layout>
+    <Provider session={pageProps.session}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </Provider>
   );
 }
