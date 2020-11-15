@@ -1,32 +1,11 @@
 import { useState } from 'react';
-import DatePicker from 'react-datepicker';
 import { useRouter } from 'next/router';
-import 'react-datepicker/dist/react-datepicker.css';
-
-const formTextAreaStyle = {
-  width: '100%',
-  height: '300px',
-  padding: '20px',
-  marginTop: '20px',
-  marginBottom: '20px',
-  fontSize: '1.2em',
-  backgroundColor: '#f6f6f6',
-  borderRadius: '10px'
-};
-
-const buttonStyle = {
-  color: '#f6f6f6',
-  border: 0,
-  fontSize: '1.2em',
-  padding: '15px 20px',
-  letterSpacing: '0.15em',
-  borderRadius: '10px'
-};
+import moment from 'moment';
 
 const Account = ({ days }) => {
   const router = useRouter()
   const [content, setContent] = useState('');
-  const [dayDate, setDayDate] = useState(new Date());
+  const [dayDate, setDate] = useState(new Date());
 
   const submitDay = async (e) => {
     e.preventDefault();
@@ -52,26 +31,50 @@ const Account = ({ days }) => {
   }
 
   return (
-    <div>
-      <form>
-        <DatePicker
-          selected={dayDate}
-          endDate={dayDate}
-          onChange={date => setDayDate(date)}
-          className='day-select-input'
-          calendarClassName='day-select-calendar' />
+    <div class="container is-family-monospace control">
+      <div class="columns is-family-monospace">
+        <div class="column is-one-quarter">
+          <div class="field">
+            <label
+              class="label is-family-monospace">Date
+            </label>
+            <input
+              class="input is-family-monospace"
+              onChange={e => {
+                setDate(new Date(e.target.value + 'T00:00:00'))
+              }}
+              value={moment(dayDate).format('YYYY-MM-DD')}
+              type="date">
+            </input>
+          </div>
+          <div class="field">
+            <button
+              type="submit"
+              class="button is-primary is-family-monospace has-text-weight-semibold is-fullwidth"
+              onClick={submitDay}>✏️ Save day
+            </button>
+          </div>
 
-        <textarea
-          style={formTextAreaStyle}
-          placeholder='What did you do today?'
-          onChange={(e) => setContent(e.target.value)}>
-        </textarea>
-
-        <button
-          type="submit"
-          style={buttonStyle}
-          onClick={submitDay}>Submit</button>
-      </form>
+          <p class="content has-text-grey-light">
+            👯‍♀️ <span class="is-italic">Who did you see?</span><br></br>
+            🚌 <span class="is-italic">Where did you go?</span><br></br>
+            🌯 <span class="is-italic">What did you eat?</span><br></br>
+            🤔 <span class="is-italic">How did you feel?</span><br></br>
+          </p>
+        </div>
+        <div class="column is-three-quarters">
+          <form>
+            <div class="field">
+              <label class="label">What did you do on {moment(dayDate).format('dddd, MMMM Do')}?</label>
+              <textarea
+                class="textarea is-family-monospace"
+                rows="12"
+                onChange={e => setContent(e.target.value)}>
+              </textarea>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   );
 };

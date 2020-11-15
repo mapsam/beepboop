@@ -8,7 +8,7 @@ export default async (req, res) => {
   const { db } = await connectToDatabase();
 
   if (req.method === 'POST') {
-    console.log('POST /days session', session);
+    console.log('POST', req.body);
     const d = new Date();
     const doc = {...req.body};
 
@@ -21,6 +21,37 @@ export default async (req, res) => {
       .update({ _id: doc._id }, doc, { upsert: true });
 
     return res.json(doc);
+  } else if (req.method === 'PUT') {
+    console.log('PUT', req.body);
+    if (!req.body.year) return res.status(400).json({message: 'no year provided'});
+    if (!req.body.month) return res.status(400).json({message: 'no month provided'});
+    if (!req.body.day) return res.status(400).json({message: 'no day provided'});
+    if (!req.body.text) return res.status(400).json({message: 'no text provided'});
+
+    const id = `${session.userId}:${req.body.year}${req.body.month}${req.body.day}`;
+    const set = {
+      $set: {
+        updatedAt: new Date(),
+        text: req.body.text
+      }
+    };
+
+    await db.collection('days')
+      .update({ _id: id }, set);
+
+    return res.json(201);
+  } else if (req.method === 'DELETE') {
+    console.log('DELETE', req.body);
+    if (!req.body.year) return res.status(400).json({message: 'no year provided'});
+    if (!req.body.month) return res.status(400).json({message: 'no month provided'});
+    if (!req.body.day) return res.status(400).json({message: 'no day provided'});
+
+    const id = `${session.userId}:${req.body.year}${req.body.month}${req.body.day}`;
+
+    await db.collection('days')
+      .deleteOne({ _id: id }, true);
+
+    return res.status(204).send();
   } else {
     const params = {
       userId: session.userId

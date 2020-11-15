@@ -1,6 +1,6 @@
 export function createDay(date, account, text) {
   const year = date.getFullYear();
-  const month = date.getMonth();
+  const month = date.getMonth() + 1;
   const day = date.getDate();
   const weekday = date.getDay();
 
@@ -10,6 +10,7 @@ export function createDay(date, account, text) {
     day,
     weekday,
     text,
-    account: account
+    account: account,
+    _id: `${session.userId}:${doc.year}${doc.month}${doc.day}`;
   };
 };

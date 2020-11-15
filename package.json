@@ -25,19 +25,14 @@
   },
   "homepage": "https://github.com/mapsam/day#readme",
   "dependencies": {
-    "image-type": "^4.1.0",
+    "moment": "^2.29.1",
     "mongodb": "^3.6.3",
     "next": "^10.0.0",
     "next-auth": "^3.1.0",
-    "passport": "^0.4.1",
-    "passport-google-oauth20": "^2.0.0",
     "react": "^17.0.1",
-    "react-datepicker": "^3.3.0",
     "react-dom": "^17.0.1"
   },
-  "devDependencies": {
-    "nodemon": "^2.0.6"
-  },
+  "devDependencies": {},
   "peerOptionalDependencies": {
     "mongodb": "^3.6.3"
   }

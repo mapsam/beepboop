@@ -4,10 +4,7 @@ import Nav from "./Nav";
 const Layout = props => (
   <div className='Layout'>
     <Nav />
-    <div className='Content'>
-      {props.children}
-    </div>
-    {/* <NavBar /> */}
+    <section class="section">{props.children}</section>
   </div>
 );
 

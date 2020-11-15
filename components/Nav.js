@@ -1,57 +1,54 @@
-import { useRouter } from 'next/router'
 import { signIn, signOut, useSession } from 'next-auth/client'
+import { randomEmoji } from '../utils/emoji.js';
 
-const navStyle = {
-  width: "100%"
-};
-
-const logoStyle = {
-  fontSize: '3em',
-  fontWeight: '700'
-};
-
-const navLinks = {
-  float: 'right',
-  listStyleType: 'none',
-};
-
-const navLink = {
-  float: 'right',
-  marginLeft: '20px'
-}
-
-const authButton = {
-  background: 'none',
-  color: '#f012be',
-  fontSize: '1em',
-  textDecoration: 'underline',
-  border: 'none',
-  padding: '0',
-  margin: '0 10px'
+const accountImageButton = {
+  borderRadius: '10%'
 }
 
 const Nav = () => {
-  const router = useRouter();
   const [ session, loading ] = useSession();
 
   return (
-    <div className="Nav" style={navStyle}>
-      <span className="Logo" style={logoStyle}>Day.</span>
-      <ul style={navLinks}>
-        <li key="nav-new" style={navLink}>
-          <a style={authButton} href="/new">new</a>
-        </li>
-        <li key="nav-account" style={navLink}>
-        {!session && <>
-          <button style={authButton} onClick={signIn}>Login</button>
-        </>}
-        {session && <>
-          <a style={authButton} href="/days">{session.user.email}</a>
-          <button style={authButton} onClick={signOut}>Logout</button>
-        </>}
-        </li>
-      </ul>
-    </div>
+    <navbar class="hero is-fullwidth">
+      <nav class="navbar" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+          <a class="navbar-item" href="/">
+            <h1 class="title">Day {randomEmoji()}</h1>
+          </a>
+
+          <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+            <span aria-hidden="true"></span>
+          </a>
+        </div>
+
+        <div class="navbar-menu">
+          <div class="navbar-end">
+            <div class="navbar-item">
+              {session &&
+                <div class="buttons">
+                  <a class="button is-light" href="/days">Days</a>
+                  <a class="button is-link" href="/new">New</a>
+                  <a class="button" href="/account">
+                    <span class="icon">
+                      <img style={accountImageButton} src={session.user.image}></img>
+                    </span>
+                  </a>
+                </div>
+              }
+              {!session &&
+                <div class="buttons">
+                  <button class="button is-primary" onclick={signIn}>
+                    <strong>Login</strong>
+                  </button>
+                </div>
+              }
+            </div>
+          </div>
+        </div>
+      </nav>
+    </navbar>
   );
 };
 

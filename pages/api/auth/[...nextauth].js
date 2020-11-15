@@ -4,8 +4,7 @@ import Providers from 'next-auth/providers'
 const {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
-  MONGODB_URI,
-  MONGODB_DB
+  MONGODB_URI
 } = process.env;
 
 const options = {
@@ -15,9 +14,9 @@ const options = {
       clientSecret: GOOGLE_CLIENT_SECRET
     })
   ],
-  database: `${MONGODB_URI}/${MONGODB_DB}`,
+  database: MONGODB_URI,
   callbacks: {
-    session: async (session, user, sessionToken) => {
+    session: async (session, user) => {
       session.userId = user.id;
       return Promise.resolve(session)
     }
