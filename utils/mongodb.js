@@ -1,6 +1,6 @@
 'use strict';
 
-import { MongoClient } from 'mongodb';
+import { MongoClient, ObjectID } from 'mongodb';
 
 const { MONGODB_URI, MONGODB_DB } = process.env;
 
@@ -44,4 +44,8 @@ export async function connectToDatabase() {
   }
   await cached.promise;
   return cached.conn;
+}
+
+export function idFromString(str) {
+  return new ObjectID(str);
 }

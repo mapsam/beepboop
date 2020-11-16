@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { weekday, zeros } from '../utils/date.js';
 
 const dayTextStyle = {
   whiteSpace: 'pre-wrap'
@@ -76,16 +77,20 @@ const Day = props => {
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       key={props.children._id}>
-      <div class="column has-text-link has-text-weight-semibold">
-        <div class="content">
+      <div class="column " key={props.children._id + '-date'}>
+        <div class="content has-text-info has-text-weight-semibold is-size-5">
           <span class="content">{props.children.year}</span>
           <span class="content mx-1 has-text-dark">/</span>
-          <span class="content">{props.children.month}</span>
+          <span class="content">{zeros(props.children.month)}</span>
           <span class="content mx-1 has-text-dark">/</span>
-          <span class="content">{props.children.day}</span>
+          <span class="content">{zeros(props.children.day)}</span>
+          <br />
+          <span class="has-text-grey-light has-text-weight-light is-size-6">
+            {weekday(props.children.weekday)}
+          </span>
         </div>
       </div>
-      <div class="column is-three-quarters has-text-weight-medium" style={dayTextStyle}>
+      <div class="column is-three-quarters has-text-weight-medium" style={dayTextStyle} key={props.children._id + '-content'}>
         {!edit &&
           <div class="content">
             <p class="content">{text}</p>

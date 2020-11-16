@@ -3,7 +3,7 @@ import { connectToDatabase } from '../../../utils/mongodb.js';
 
 export default async (req, res) => {
   const session = await getSession({ req });
-  if (!session) return res.json({ error: 'You must be sign in to view the protected content on this page.' });
+  if (!session) return res.json({ error: 'You must be signed in to use this API.' });
 
   const { db } = await connectToDatabase();
 
@@ -37,7 +37,7 @@ export default async (req, res) => {
     };
 
     await db.collection('days')
-      .update({ _id: id }, set);
+      .updateOne({ _id: id }, set);
 
     return res.json(201);
   } else if (req.method === 'DELETE') {
@@ -51,7 +51,7 @@ export default async (req, res) => {
     await db.collection('days')
       .deleteOne({ _id: id }, true);
 
-    return res.status(204).send();
+    return res.status(204).send('');
   } else {
     const params = {
       userId: session.userId

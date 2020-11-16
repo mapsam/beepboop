@@ -34,18 +34,20 @@ export async function getServerSideProps(context) {
 
 const Page = ({ days }) => {
   return (
-    <div class="container">
-      <div class="columns">
-        <div class="column is-three-quarters">
-          {days.map((day) => (
-            <Day>{day}</Day>
-          ))}
-        </div>
-        <div class="column">
-          /days sidebar
+    <section class="section">
+      <div class="container">
+        <div class="columns">
+          <div class="column is-three-quarters">
+            {days.map((day) => (
+              <Day>{day}</Day>
+            ))}
+          </div>
+          <div class="column">
+            /days sidebar
+          </div>
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

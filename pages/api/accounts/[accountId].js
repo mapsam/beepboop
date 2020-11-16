@@ -1,5 +1,5 @@
 import { getSession } from 'next-auth/client';
-import { connectToDatabase } from '../../../utils/mongodb.js';
+import { connectToDatabase, idFromString } from '../../../utils/mongodb.js';
 
 export default async (req, res) => {
   const { accountId } = req.query;
@@ -9,8 +9,10 @@ export default async (req, res) => {
 
   const { db } = await connectToDatabase();
   console.log(session);
+
+  const userId = idFromString(session.userId);
   const user = await db.collection('users')
-    .find({ email: session.user.email })
+    .find({ _id: userId })
     .toArray();
 
   if (!user.length) return res.json({ error: 'Something went wrong.' });

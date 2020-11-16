@@ -51,7 +51,7 @@ const Account = ({ days }) => {
             <button
               type="submit"
               class="button is-primary is-family-monospace has-text-weight-semibold is-fullwidth"
-              onClick={submitDay}>✏️ Save day
+              onClick={submitDay}>💾 Save day
             </button>
           </div>
 
