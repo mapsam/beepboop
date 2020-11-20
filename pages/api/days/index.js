@@ -1,5 +1,6 @@
 import { getSession } from 'next-auth/client';
 import { connectToDatabase, dayId } from '../../../utils/mongodb.js';
+import { ObjectID } from 'mongodb';
 
 function log(request) {
   console.log(`${request.method} ${request.url} ${JSON.stringify(request.body)}`);
@@ -20,10 +21,9 @@ export default async (req, res) => {
     if (!req.body.text) return res.status(400).json({message: 'no text provided'});
 
     const d = new Date();
-    const doc = {...req.body};
 
     const params = {
-      userId: session.userId,
+      userId: ObjectID(session.userId),
       year: +req.body.year,
       month: +req.body.month,
       day: +req.body.day,
@@ -34,7 +34,12 @@ export default async (req, res) => {
 
     await db.collection('days').insertOne(params);
 
-    return res.json(doc);
+    return res.json({
+      year: +req.body.year,
+      month: +req.body.month,
+      day: +req.body.day,
+      text: +req.body.text
+    });
 
   // modify day
   } else if (req.method === 'PUT') {
@@ -44,7 +49,7 @@ export default async (req, res) => {
     if (!req.body.text) return res.status(400).json({message: 'no text provided'});
 
     const params = {
-      userId: session.userId,
+      userId: ObjectID(session.userId),
       year: +req.body.year,
       month: +req.body.month,
       day: +req.body.day
@@ -68,7 +73,7 @@ export default async (req, res) => {
     if (!req.body.day) return res.status(400).json({message: 'no day provided'});
 
     const params = {
-      userId: session.userId,
+      userId: ObjectID(session.userId),
       year: +req.body.year,
       month: +req.body.month,
       day: +req.body.day
@@ -81,7 +86,7 @@ export default async (req, res) => {
   // get day(s)
   } else {
     const params = {
-      userId: session.userId
+      userId: ObjectID(session.userId)
     };
 
     if (req.query.year) params.year = +req.query.year;
@@ -90,10 +95,10 @@ export default async (req, res) => {
     if (req.query.weekday) params.weekday = +req.query.weekday;
 
     const days = await db.collection('days')
-      .find(params, { projection: { _id: 0 }})
+      .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0 }})
       .sort({ year: -1, month: -1, day: -1 })
       .toArray();
 
-    return res.json(linkedDays);
+    return res.json(days);
   }
 }

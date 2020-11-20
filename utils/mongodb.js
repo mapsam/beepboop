@@ -45,7 +45,3 @@ export async function connectToDatabase() {
   await cached.promise;
   return cached.conn;
 }
-
-export function idFromString(str) {
-  return new ObjectID(str);
-}

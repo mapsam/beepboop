@@ -1,6 +1,7 @@
 import Day from '../components/Day.js';
 import { connectToDatabase } from '../utils/mongodb.js';
 import { getSession } from 'next-auth/client';
+import { ObjectID } from 'mongodb';
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
@@ -10,7 +11,7 @@ export async function getServerSideProps(context) {
 
   const date = new Date();
   const params = {
-    userId: session.userId
+    userId: ObjectID(session.userId)
   };
 
   // if no params provided, default to showing all days in current month
@@ -25,7 +26,7 @@ export async function getServerSideProps(context) {
   if (context.query.weekday) params.weekday = +context.query.weekday;
 
   const days = await db.collection('days')
-    .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0 }})
+    .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0 }})
     .sort({ year: -1, month: -1, day: -1 })
     .toArray();
 
