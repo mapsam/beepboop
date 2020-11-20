@@ -2,6 +2,8 @@ import './main.css';
 import Layout from '../components/Layout.js';
 import { Provider } from 'next-auth/client'
 import Head from 'next/head';
+// https://github.com/nextauthjs/next-auth/issues/833
+import 'reflect-metadata';
 
 export default function App({ Component, pageProps }) {
   return (

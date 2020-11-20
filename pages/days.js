@@ -25,7 +25,7 @@ export async function getServerSideProps(context) {
   if (context.query.weekday) params.weekday = +context.query.weekday;
 
   const days = await db.collection('days')
-    .find(params, { projection: { createdAt: 0, updatedAt: 0 }})
+    .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0 }})
     .sort({ year: -1, month: -1, day: -1 })
     .toArray();
 
@@ -34,15 +34,15 @@ export async function getServerSideProps(context) {
 
 const Page = ({ days }) => {
   return (
-    <section class="section">
-      <div class="container">
-        <div class="columns">
-          <div class="column is-three-quarters">
+    <section className="section" key="random-key">
+      <div className="container">
+        <div className="columns">
+          <div className="column is-three-quarters">
             {days.map((day) => (
               <Day>{day}</Day>
             ))}
           </div>
-          <div class="column">
+          <div className="column">
             /days sidebar
           </div>
         </div>

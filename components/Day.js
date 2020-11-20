@@ -1,5 +1,6 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { weekday, zeros } from '../utils/date.js';
+import { linkify } from '../utils/linkify.js';
 
 const dayTextStyle = {
   whiteSpace: 'pre-wrap'
@@ -12,6 +13,7 @@ const controlsStyle = {
 
 const Day = props => {
   const [text, setText] = useState(props.children.text);
+  const [visualText, setVisualText] = useState(linkify(text));
   const [edit, setEdit] = useState(false);
   const [editText, setEditText] = useState(props.children.text);
   const [hover, setHover] = useState(false);
@@ -45,7 +47,8 @@ const Day = props => {
     });
 
     await response.json();
-    setText(editText)
+    setText(editText);
+    setVisualText(linkify(editText));
     setEdit(false);
   };
 
@@ -73,46 +76,46 @@ const Day = props => {
 
   return (
     <div
-      class="columns mb-6 is-family-monospace"
+      className="columns mb-6 is-family-monospace"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       key={props.children._id}>
-      <div class="column " key={props.children._id + '-date'}>
-        <div class="content has-text-info has-text-weight-semibold is-size-5">
-          <span class="content">{props.children.year}</span>
-          <span class="content mx-1 has-text-dark">/</span>
-          <span class="content">{zeros(props.children.month)}</span>
-          <span class="content mx-1 has-text-dark">/</span>
-          <span class="content">{zeros(props.children.day)}</span>
+      <div className="column " key={props.children._id + '-date'}>
+        <div className="content has-text-info has-text-weight-semibold is-size-5">
+          <span className="content">{props.children.year}</span>
+          <span className="content mx-1 has-text-dark">/</span>
+          <span className="content">{zeros(props.children.month)}</span>
+          <span className="content mx-1 has-text-dark">/</span>
+          <span className="content">{zeros(props.children.day)}</span>
           <br />
-          <span class="has-text-grey-light has-text-weight-light is-size-6">
+          <span className="has-text-grey-light has-text-weight-light is-size-6">
             {weekday(props.children.weekday)}
           </span>
         </div>
       </div>
-      <div class="column is-three-quarters has-text-weight-medium" style={dayTextStyle} key={props.children._id + '-content'}>
+      <div className="column is-three-quarters has-text-weight-medium" style={dayTextStyle} key={props.children._id + '-content'}>
         {!edit &&
-          <div class="content">
-            <p class="content">{text}</p>
-            <div class={hover ? '' : 'is-invisible-desktop'} style={controlsStyle}>
-              <div class="columns buttons are-small has-text-weight-semibold">
-                <div class="column is-one-quarter">
-                  <a class="button is-ghost is-fullwidth" href={permalink}>🔗 permalink</a>
+          <div className="content">
+            <p className="content" dangerouslySetInnerHTML={{__html: visualText}}></p>
+            <div className={hover ? '' : 'is-invisible-desktop'} style={controlsStyle}>
+              <div className="columns buttons are-small has-text-weight-semibold">
+                <div className="column is-one-quarter">
+                  <a className="button is-ghost is-fullwidth" href={permalink}>🔗 permalink</a>
                 </div>
-                <div class="column is-one-quarter">
-                  <a class="button is-ghost is-fullwidth" onClick={e => setEdit(true)}>✏️ edit</a>
+                <div className="column is-one-quarter">
+                  <a className="button is-ghost is-fullwidth" onClick={e => setEdit(true)}>✏️ edit</a>
                 </div>
-                <div class="column is-one-quarter">
+                <div className="column is-one-quarter">
                   {deleteConf &&
-                    <a class="button is-danger is-fullwidth" onClick={deleteDay}>🔪 really?</a>
+                    <a className="button is-danger is-fullwidth" onClick={deleteDay}>🔪 really?</a>
                   }
                   {!deleteConf &&
-                    <a class="button is-ghost is-fullwidth" onClick={e => setDeleteConf(true)}>🔪 delete</a>
+                    <a className="button is-ghost is-fullwidth" onClick={e => setDeleteConf(true)}>🔪 delete</a>
                   }
                 </div>
-                <div class="column is-one-quarter">
+                <div className="column is-one-quarter">
                   {deleteConf &&
-                    <a class="button is-light" onClick={e => setDeleteConf(false)}>🙅‍♀️ nvm</a>
+                    <a className="button is-light" onClick={e => setDeleteConf(false)}>🙅‍♀️ nvm</a>
                   }
                 </div>
               </div>
@@ -121,22 +124,22 @@ const Day = props => {
         }
         {edit &&
           <form>
-            <div class="field">
+            <div className="field">
               <textarea
-                class="textarea is-family-monospace"
+                className="textarea is-family-monospace"
                 rows="12"
                 value={editText}
                 onChange={e => setEditText(e.target.value)}>
               </textarea>
             </div>
-            <div class="buttons are-small">
+            <div className="buttons are-small">
               <button
                 type="submit"
-                class="button is-primary is-family-monospace has-text-weight-semibold"
+                className="button is-primary is-family-monospace has-text-weight-semibold"
                 onClick={updateDay}>💾 Save changes
               </button>
               <button
-                class="button is-light is-family-monospace has-text-weight-semibold"
+                className="button is-light is-family-monospace has-text-weight-semibold"
                 onClick={e => setEdit(false)}>🙅‍♀️ nvm
               </button>
             </div>
