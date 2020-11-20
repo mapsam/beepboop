@@ -1,5 +1,6 @@
 import { getSession } from 'next-auth/client';
-import { connectToDatabase, idFromString } from '../../../utils/mongodb.js';
+import { connectToDatabase } from '../../../utils/mongodb.js';
+import { ObjectID } from 'mongodb';
 
 export default async (req, res) => {
   const { accountId } = req.query;
@@ -8,9 +9,8 @@ export default async (req, res) => {
   if (!session) return res.json({ error: 'You must be sign in to view the protected content on this page.' });
 
   const { db } = await connectToDatabase();
-  console.log(session);
 
-  const userId = idFromString(session.userId);
+  const userId = ObjectID(session.userId);
   const user = await db.collection('users')
     .find({ _id: userId })
     .toArray();
