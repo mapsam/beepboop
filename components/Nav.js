@@ -21,7 +21,7 @@ const Nav = () => {
     <nav className={navClass} role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
         <a className="navbar-item" href="/">
-          <h1 className="title underline">BeepBoop.</h1>
+          <h1 className="title underline">beepboop.</h1>
         </a>
 
         <a
