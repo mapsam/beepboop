@@ -1,12 +1,12 @@
 export function weekday(n) {
   const weekdays = [
-    'Sunday',
     'Monday',
     'Tuesday',
     'Wednesday',
     'Thursday',
     'Friday',
-    'Saturday'
+    'Saturday',
+    'Sunday'
   ];
 
   return weekdays[n];

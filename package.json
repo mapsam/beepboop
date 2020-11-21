@@ -25,6 +25,8 @@
   },
   "homepage": "https://github.com/mapsam/day#readme",
   "dependencies": {
+    "@zeit/next-sass": "^1.0.1",
+    "bulma": "^0.9.1",
     "moment": "^2.29.1",
     "mongodb": "^3.6.3",
     "next": "^10.0.0",
@@ -34,7 +36,9 @@
     "reflect-metadata": "^0.1.13",
     "typeorm": "0.2.28"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "node-sass": "^4.14.1"
+  },
   "peerOptionalDependencies": {
     "mongodb": "^3.6.3"
   }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/client';
+import Content from '../components/Content.js';
 
 const settingsStyle = {
   borderTop: '1px solid #dddddd'
@@ -34,8 +35,7 @@ export default function Account () {
 
   // If session exists, display content
   return (
-
-    <div class="container is-family-monospace">
+    <Content>
       <div class="columns my-6 pt-6">
         <div class="column is-two-thirds">
           <p class="has-text-weight-bold title is-1">Account</p>
@@ -123,8 +123,6 @@ export default function Account () {
           </div>
         </div>
       </div>
-
-
-    </div>
+    </Content>
   )
 }

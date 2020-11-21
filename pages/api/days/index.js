@@ -20,16 +20,21 @@ export default async (req, res) => {
     if (!req.body.day) return res.status(400).json({message: 'no day provided'});
     if (!req.body.text) return res.status(400).json({message: 'no text provided'});
 
-    const d = new Date();
+    const now = new Date();
+    const d = new Date(+req.body.year, +req.body.month - 1, +req.body.day);
+    console.log(d);
+    console.log(d.getDay());
 
     const params = {
       userId: ObjectID(session.userId),
       year: +req.body.year,
       month: +req.body.month,
       day: +req.body.day,
+      weekday: d.getDay(),
       text: req.body.text,
-      createdAt: d,
-      updatedAt: d
+      createdAt: now,
+      updatedAt: now,
+      date: d
     };
 
     await db.collection('days').insertOne(params);

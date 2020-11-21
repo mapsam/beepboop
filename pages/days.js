@@ -1,4 +1,5 @@
 import Day from '../components/Day.js';
+import Content from '../components/Content.js';
 import { connectToDatabase } from '../utils/mongodb.js';
 import { getSession } from 'next-auth/client';
 import { ObjectID } from 'mongodb';
@@ -26,7 +27,7 @@ export async function getServerSideProps(context) {
   if (context.query.weekday) params.weekday = +context.query.weekday;
 
   const days = await db.collection('days')
-    .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0 }})
+    .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0, date: 0 }})
     .sort({ year: -1, month: -1, day: -1 })
     .toArray();
 
@@ -35,20 +36,18 @@ export async function getServerSideProps(context) {
 
 const Page = ({ days }) => {
   return (
-    <section className="section" key="random-key">
-      <div className="container">
-        <div className="columns">
-          <div className="column is-three-quarters">
-            {days.map((day) => (
-              <Day>{day}</Day>
-            ))}
-          </div>
-          <div className="column">
-            /days sidebar
-          </div>
+    <Content>
+      <div className="columns">
+        <div className="column is-two-thirds">
+          {days.map((day) => (
+            <Day>{day}</Day>
+          ))}
+        </div>
+        <div className="column">
+          /days sidebar
         </div>
       </div>
-    </section>
+    </Content>
   );
 };
 

@@ -10,12 +10,11 @@ const Account = ({ days }) => {
   return (
     <section className="hero is-fullheight is-fullheight-with-navbar has-bg-img">
       <div className="hero-body">
-        <div className="container">
+        <div className="container is-max-desktop">
           <div className="columns">
-            <div className="column is-half is-family-monospace">
-              <h1 className="title has-text-weight-light">
-                <span className="has-text-weight-bold" style={underlineStyle}>Day</span> is a simple, daily journal.</h1>
-                <h2 className="subtitle">Free, private, built with love ❤️ and coffee ☕️</h2>
+            <div className="column is-half">
+                <h1 className="title is-size-2">MeepMoop! 🤖</h1>
+                <h2 className="is-size-5"><span className="subtitle has-text-weight-bold underline">Beepboop</span> is a simple, daily journal. Jot down your feelings, record what you ate, or write a poem. 1000 characters per day.<br /><br />Private, free, &amp; built with love ❤️</h2>
 
                 {!session &&
                 <a className="mt-4" onClick={() => signIn('google')}>

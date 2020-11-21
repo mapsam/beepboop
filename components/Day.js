@@ -76,44 +76,48 @@ const Day = props => {
 
   return (
     <div
-      className="columns mb-6 is-family-monospace"
+      className="columns mb-6"
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       key={props.children._id}>
       <div className="column " key={props.children._id + '-date'}>
-        <div className="content has-text-info has-text-weight-semibold is-size-5">
+        <div className="content has-text-weight-semibold is-size-5">
           <span className="content">{props.children.year}</span>
-          <span className="content mx-1 has-text-dark">/</span>
+          <span className="content mx-1 has-text-dark">.</span>
           <span className="content">{zeros(props.children.month)}</span>
-          <span className="content mx-1 has-text-dark">/</span>
+          <span className="content mx-1 has-text-dark">.</span>
           <span className="content">{zeros(props.children.day)}</span>
           <br />
           <span className="has-text-grey-light has-text-weight-light is-size-6">
-            {weekday(props.children.weekday)}
+            {weekday(props.children.weekday - 1)}
           </span>
         </div>
       </div>
       <div className="column is-three-quarters has-text-weight-medium" style={dayTextStyle} key={props.children._id + '-content'}>
         {!edit &&
           <div className="content">
-            <p className="content" dangerouslySetInnerHTML={{__html: visualText}}></p>
+
+            {/* CONTENT HERE */}
+            <p className="content has-text-weight-normal" dangerouslySetInnerHTML={{__html: visualText}}></p>
+            {/* END CONTENT */}
+
             <div className={hover ? '' : 'is-invisible-desktop'} style={controlsStyle}>
               <div className="columns buttons are-small has-text-weight-semibold">
-                <div className="column is-one-quarter">
-                  <a className="button is-ghost is-fullwidth" href={permalink}>🔗 permalink</a>
+                <div className="column is-one-fifth">
+                  <a className="button is-ghost is-fullwidth" href={permalink}>🔗</a>
                 </div>
-                <div className="column is-one-quarter">
-                  <a className="button is-ghost is-fullwidth" onClick={e => setEdit(true)}>✏️ edit</a>
+                <div className="column is-one-fifth">
+                  <a className="button is-ghost is-fullwidth" onClick={e => setEdit(true)}>✏️</a>
                 </div>
-                <div className="column is-one-quarter">
+                <div className="column is-one-fifth">
                   {deleteConf &&
-                    <a className="button is-danger is-fullwidth" onClick={deleteDay}>🔪 really?</a>
+                    <a className="button is-danger is-fullwidth" onClick={deleteDay}>🔪 ?</a>
                   }
                   {!deleteConf &&
-                    <a className="button is-ghost is-fullwidth" onClick={e => setDeleteConf(true)}>🔪 delete</a>
+                    <a className="button is-ghost is-fullwidth" onClick={e => setDeleteConf(true)}>🔪</a>
                   }
                 </div>
-                <div className="column is-one-quarter">
+                <div className="column is-one-fifth">
                   {deleteConf &&
                     <a className="button is-light" onClick={e => setDeleteConf(false)}>🙅‍♀️ nvm</a>
                   }
@@ -126,7 +130,7 @@ const Day = props => {
           <form>
             <div className="field">
               <textarea
-                className="textarea is-family-monospace"
+                className="textarea"
                 rows="12"
                 value={editText}
                 onChange={e => setEditText(e.target.value)}>
@@ -135,11 +139,11 @@ const Day = props => {
             <div className="buttons are-small">
               <button
                 type="submit"
-                className="button is-primary is-family-monospace has-text-weight-semibold"
-                onClick={updateDay}>💾 Save changes
+                className="button is-primary has-text-weight-semibold"
+                onClick={updateDay}>💾
               </button>
               <button
-                className="button is-light is-family-monospace has-text-weight-semibold"
+                className="button is-light has-text-weight-semibold"
                 onClick={e => setEdit(false)}>🙅‍♀️ nvm
               </button>
             </div>

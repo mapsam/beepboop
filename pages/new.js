@@ -1,3 +1,4 @@
+import Content from '../components/Content.js';
 import { useState } from 'react';
 import { useRouter } from 'next/router';
 import moment from 'moment';
@@ -14,7 +15,6 @@ const Account = ({ days }) => {
       year: dayDate.getFullYear(),
       month: dayDate.getMonth() + 1,
       day: dayDate.getDate(),
-      weekday: dayDate.getDay(),
       text: content
     }
 
@@ -31,7 +31,7 @@ const Account = ({ days }) => {
   }
 
   return (
-    <div class="container is-family-monospace control">
+    <Content>
       <div class="columns is-family-monospace">
         <div class="column is-one-quarter">
           <div class="field">
@@ -75,7 +75,7 @@ const Account = ({ days }) => {
           </form>
         </div>
       </div>
-    </div>
+    </Content>
   );
 };
 

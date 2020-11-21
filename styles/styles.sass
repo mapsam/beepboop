@@ -1,0 +1,34 @@
+@charset "utf-8";
+// @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&display=swap');
+// $family-sans-serif: 'Noto Serif JP', serif
+
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+$family-sans-serif: 'Lora', serif
+
+// colors
+$dark: #120B17
+
+// globals
+html
+  background-color: $dark
+
+// custom helpers
+/* https://unsplash.com/photos/x2Tmfd1-SgA */
+.has-bg-img
+  background: url('/landing-plant.jpg') center center
+  background-size: cover
+
+.has-background-none
+  background-color: transparent
+
+.underline
+  text-decoration: underline
+
+.circle-button
+  border-radius: 100%
+  overflow: hidden
+  line-height: 0
+
+// import bulma
+@import "../node_modules/bulma/bulma.sass"
+
