@@ -3,7 +3,8 @@
 // $family-sans-serif: 'Noto Serif JP', serif
 
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-$family-sans-serif: 'Lora', serif
+$family-primary: 'Lora', serif
+// $family-secondary:
 
 // colors
 $dark: #120B17
@@ -11,6 +12,21 @@ $dark: #120B17
 // globals
 html
   background-color: $dark
+
+*::-webkit-clear-button
+  display: none
+  -webkit-appearance: none
+
+input[type="date"]
+  -webkit-appearance: none
+
+input:focus
+  outline: none
+
+.robot
+  max-width: 35px
+  height: auto
+  opacity: 0.7
 
 // custom helpers
 /* https://unsplash.com/photos/x2Tmfd1-SgA */

@@ -43,7 +43,7 @@ export default async (req, res) => {
       year: +req.body.year,
       month: +req.body.month,
       day: +req.body.day,
-      text: +req.body.text
+      text: req.body.text
     });
 
   // modify day

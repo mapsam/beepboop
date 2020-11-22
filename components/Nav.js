@@ -1,6 +1,7 @@
 import { signIn, signOut, useSession } from 'next-auth/client'
 import { useRouter } from 'next/router';
 import { useState } from 'react';
+import { ReactSVG } from 'react-svg';
 
 const accountImageButton = {
   width: '100%',
@@ -21,7 +22,10 @@ const Nav = () => {
     <nav className={navClass} role="navigation" aria-label="main navigation">
       <div className="navbar-brand">
         <a className="navbar-item" href="/">
-          <h1 className="title underline">beepboop.</h1>
+          <ReactSVG src="/robot.svg" className="robot mr-3"/>
+          <h1 className="title">
+            beepboop.
+          </h1>
         </a>
 
         <a
@@ -41,11 +45,11 @@ const Nav = () => {
         {session &&
           <div className="navbar-end">
             <div className="navbar-item">
-              <a className="button is-white has-text-weight-medium" href="/days">📅 Days</a>
+              <a className="button is-light has-text-weight-medium" href="/days">Days</a>
             </div>
 
             <div className="navbar-item">
-              <a className="button is-primary has-text-weight-bold" href="/new">New ✏️</a>
+              <a className="button is-ghost has-text-weight-bold" href="/new">New</a>
             </div>
 
             <div className="navbar-item">

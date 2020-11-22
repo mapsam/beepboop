@@ -83,8 +83,8 @@ export default function Account () {
         <div class="column content">
           <p class="has-text-weight-bold">Download account data</p>
           <p>This will download <span class="is-italic">all</span> days associated to your account.</p>
-          <button class="button is-info is-family-monospace has-text-weight-semibold mr-2 is-small" onClick={signOut}>CSV</button>
-          <button class="button is-info is-family-monospace has-text-weight-semibold mr-2 is-small" onClick={signOut}>JSON</button>
+          <button class="button is-info has-text-weight-semibold mr-2 is-small" onClick={signOut}>CSV</button>
+          <button class="button is-info has-text-weight-semibold mr-2 is-small" onClick={signOut}>JSON</button>
         </div>
       </div>
 
@@ -98,7 +98,7 @@ export default function Account () {
             {showToken ? session.accessToken : '🔒 ... hidden ...'}
           </pre>
           <button
-            class="button is-inversed is-info is-family-monospace is-small has-text-weight-semibold"
+            class="button is-inversed is-info is-small has-text-weight-semibold"
             onClick={() => setShowToken(!showToken)}>
               {showToken ? 'hide token' : 'show token'}
           </button>
@@ -107,19 +107,19 @@ export default function Account () {
 
       <div class="columns my-6 pt-6" style={settingsStyle}>
         <div class="column is-one-quarter">
-          <p class="has-text-weight-bold title is-4">Goodbye.</p>
+          <p class="has-text-weight-bold title is-4">Goodbye</p>
         </div>
         <div class="column content">
           <div class="block">
             <p class="has-text-weight-bold">Logout</p>
             <p>This will log your out of your current session.</p>
-            <button class="button is-ghost is-family-monospace is-small" onClick={signOut}>Logout</button>
+            <button class="button is-ghost is-small" onClick={signOut}>Logout</button>
           </div>
 
           <div class="block">
             <p class="has-text-weight-bold">Delete your account</p>
             <p>This is a permanent action! If you want a record of your data, be sure to download it before deleting your account.</p>
-            <button class="button is-danger is-family-monospace is-small has-text-weight-bold" onClick={signOut}>Delete account</button>
+            <button class="button is-danger is-small has-text-weight-bold" onClick={signOut}>Delete account</button>
           </div>
         </div>
       </div>

@@ -19,12 +19,14 @@ const Day = props => {
   const [hover, setHover] = useState(false);
   const [deleteConf, setDeleteConf] = useState(false);
   const [deleted, setDeleted] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const query = `?year=${props.children.year}&month=${props.children.month}&day=${props.children.day}`;
   const permalink = `/days${query}`;
 
   const updateDay = async(e) => {
     e.preventDefault();
+    setLoading(true);
 
     if (editText == text) {
       console.log('no changes to save');
@@ -50,6 +52,7 @@ const Day = props => {
     setText(editText);
     setVisualText(linkify(editText));
     setEdit(false);
+    setLoading(false);
   };
 
   const deleteDay = async(e) => {
@@ -72,7 +75,7 @@ const Day = props => {
     setDeleted(true);
   };
 
-  if (deleted) return (<div></div>);
+  if (deleted || props.children.empty) return (<div></div>);
 
   return (
     <div
@@ -139,7 +142,7 @@ const Day = props => {
             <div className="buttons are-small">
               <button
                 type="submit"
-                className="button is-primary has-text-weight-semibold"
+                className={loading ? "button is-primary has-text-weight-semibold is-loading" : "button is-primary has-text-weight-semibold"}
                 onClick={updateDay}>💾
               </button>
               <button
