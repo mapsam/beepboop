@@ -12,8 +12,7 @@ export function weekday(n) {
   return weekdays[n];
 }
 
-const months = [
-  '',
+export const months = [
   'January',
   'Febrary',
   'March',
@@ -28,9 +27,24 @@ const months = [
   'December'
 ];
 
+export const monthNumbers = [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  7,
+  8,
+  9,
+  10,
+  11,
+  12
+];
+
 // 1-index month input
 export function monthName(m) {
-  return months[m];
+  return months[m - 1];
 };
 
 // returns 1-index month number
@@ -40,7 +54,7 @@ export function monthNum(check) {
 
 // 1-indexed months
 export function daysInMonth(year, month) {
-  if (!year || !month) return 31;
+  console.log(typeof year, typeof month, new Date(year, month, 0).getDate());
   return new Date(year, month, 0).getDate();
 }
 

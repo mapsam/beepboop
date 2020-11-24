@@ -1,5 +1,5 @@
-import { daysInMonth, monthName, monthNum } from '../utils/date.js';
-import { useState } from 'react'
+import { daysInMonth, monthName, monthNumbers } from '../utils/date.js';
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router';
 
 const DayFilters = props => {
@@ -13,7 +13,8 @@ const DayFilters = props => {
   const [ year, setYear ] = useState(+router.query.year || d.getFullYear());
   const [ month, setMonth ] = useState(+router.query.month || d.getMonth() + 1);
   const [ day, setDay ] = useState(+router.query.day || -1);
-  const [ days ] = useState(daysInMonth(year, month));
+  const [ days, setDays ] = useState(daysInMonth(year, month));
+  console.log(year, month, day, days);
 
   const dayOptions = [];
   for (let d = 1; d <= days; d++) {
@@ -24,16 +25,16 @@ const DayFilters = props => {
     }
   }
 
-  const monthOptions = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-
   function changeYear(e) {
     e.preventDefault();
     setYear(+e.target.value);
+    setDays(daysInMonth(+e.target.value, month));
   }
 
   function changeMonth(e) {
     e.preventDefault();
     setMonth(+e.target.value);
+    setDays(daysInMonth(year, +e.target.value));
   }
 
   function changeDay(e) {
@@ -46,16 +47,18 @@ const DayFilters = props => {
 
     const comp = new URLSearchParams();
     const q = {};
-    if (year > -1) comp.set('year', year);
-    if (month > -1) comp.set('month', month);
-    if (day > -1) comp.set('day', day);
+    if (year > 0) comp.set('year', year);
+    if (month > 0) comp.set('month', month);
+    if (day > 0) comp.set('day', day);
 
+    // router.push does not work here since
+    // the pathname is already /days
     window.location = `/days?${comp.toString()}`;
   }
 
   return (
     <div className="columns mb-6 has-background-light">
-      <div className="column has-text-weight-semibold is-size-5">
+      <div className="column has-text-weight-semibold has-text-grey is-size-5">
         Filters
       </div>
       <div className="column is-three-quarters">
@@ -81,7 +84,7 @@ const DayFilters = props => {
                 className="select is-dark">
                 <select onChange={changeMonth}>
                   <option value="-1">All months</option>
-                  {monthOptions.map((m) => {
+                  {monthNumbers.map((m) => {
                     if (m === month) {
                       return <option selected value={m}>{monthName(m)}</option>
                     } else {
