@@ -10,7 +10,7 @@ export default function App({ Component, pageProps }) {
     <Provider session={pageProps.session}>
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1"></meta>
-        <title>Day</title>
+        <title>Beepboop</title>
       </Head>
       <Layout>
         <Component {...pageProps} />
