@@ -8,10 +8,10 @@ const dateInputStyle = {
 };
 
 const Account = ({ days }) => {
-  const router = useRouter()
+  const router = useRouter();
   const [content, setContent] = useState('');
   const [dayDate, setDate] = useState(new Date());
-  const [placeholder, setPlaceholder] = useState(`What did you do on ${moment(dayDate).format('dddd, MMMM Do')}`);
+  const [placeholder] = useState(`What did you do on ${moment(dayDate).format('dddd, MMMM Do')}`);
   const [loading, setLoading] = useState(false);
 
   const submitDay = async (e) => {
@@ -34,7 +34,6 @@ const Account = ({ days }) => {
     });
 
     const json = await response.json();
-    setLoading(false);
     return router.push(`/days?year=${body.year}&month=${body.month}&day=${body.day}`);
   }
 

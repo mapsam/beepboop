@@ -69,6 +69,8 @@ const Page = ({ days }) => {
     <Content>
       <div className="columns">
         <div className="column is-two-thirds">
+          <DayFilters />
+
           {ds.map((day) => (
             <Day>{day}</Day>
           ))}
@@ -76,7 +78,6 @@ const Page = ({ days }) => {
 
 
         <div className="column">
-          <DayFilters />
         </div>
       </div>
     </Content>

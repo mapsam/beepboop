@@ -92,7 +92,7 @@ const Day = props => {
           <span className="content">{zeros(props.children.day)}</span>
           <br />
           <span className="has-text-grey-light has-text-weight-light is-size-6">
-            {weekday(props.children.weekday - 1)}
+            {weekday(props.children.weekday)}
           </span>
         </div>
       </div>
