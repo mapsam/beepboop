@@ -8,7 +8,7 @@ const accountImageButton = {
   height: '100%',
   position: 'relative',
   display: 'inline-block',
-  'max-height': '100%'
+  maxHeight: '100%'
 };
 
 const Nav = () => {

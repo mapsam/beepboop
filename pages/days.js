@@ -8,6 +8,14 @@ import { useRouter } from 'next/router';
 import { ObjectID } from 'mongodb';
 import moment from 'moment';
 
+const newDayTextareaStyle = {
+  outline: 'none',
+  border: 'none',
+  boxShadow: 'none',
+  borderBottome: '1px solid #c0c0c0',
+  resize: 'none'
+};
+
 export async function getServerSideProps(context) {
   const session = await getSession(context);
   if (!session) return { props: { days: [] }};
@@ -42,6 +50,9 @@ const Page = ({ days }) => {
   const [ ds, setDays ] = useState(days);
   const [ dayDate, setDate ] = useState(new Date());
   const [ content, setContent ] = useState('');
+  const [ placeholder ] = useState(`What did you do on ${moment(dayDate).format('dddd, MMMM Do')}?`);
+  const [ loading, setLoading ] = useState(false);
+  const [ showSave, setShowSave ] = useState(false);
 
   const submitDay = async (e) => {
     e.preventDefault();
@@ -62,22 +73,67 @@ const Page = ({ days }) => {
     });
 
     const json = await response.json();
-    return router.push(`/days?year=${body.year}&month=${body.month}&day=${body.day}`);
-  }
+    return window.location.reload();
+  };
+
+  const updateContent = async(e) => {
+    e.preventDefault();
+    setContent(e.target.value);
+    e.target.style.height = 'auto';
+    e.target.style.height = e.target.scrollHeight + 'px';
+    if (e.target.value.length > 0) {
+      setShowSave(true);
+    } else {
+      setShowSave(false);
+    }
+  };
 
   return (
-    <Content columns={true}>
-      <div className="column is-two-thirds">
-        <DayFilters />
+    <div>
+      <Content columns={true}>
+        <div className="column is-two-thirds">
+          <form>
+            <div className="columns">
+              <div className="column">
+              </div>
 
-        {ds.map((day) => (
-          <Day>{day}</Day>
-        ))}
-      </div>
+              <div className="column is-three-quarters">
+                <div className="field">
+                  <textarea
+                    className="textarea is-size-5 p-0"
+                    rows="1"
+                    style={newDayTextareaStyle}
+                    placeholder={placeholder}
+                    onChange={updateContent}>
+                  </textarea>
+                </div>
 
+                <div className={showSave ? "field" : "field is-invisible"}>
+                  <button
+                    type="submit"
+                    className={loading ? "button is-ghost has-text-weight-semibold is-loading" : "button is-ghost has-text-weight-semibold"}
+                    onClick={submitDay}>💾
+                  </button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </Content>
 
-      <div className="column"></div>
-    </Content>
+      <Content columns={true}>
+        <div className="column is-two-thirds">
+          {ds.map((day) => (
+            <Day>{day}</Day>
+          ))}
+        </div>
+
+        <div className="column">
+          <DayFilters />
+        </div>
+      </Content>
+    </div>
+
   );
 };
 

@@ -22,8 +22,6 @@ export default async (req, res) => {
 
     const now = new Date();
     const d = new Date(+req.body.year, +req.body.month - 1, +req.body.day);
-    console.log(d);
-    console.log(d.getDay());
 
     const params = {
       userId: ObjectID(session.userId),

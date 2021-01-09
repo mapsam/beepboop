@@ -5,7 +5,7 @@ const Account = ({ days }) => {
   const router = useRouter()
   const [ session, loading ] = useSession();
 
-  // if (session) return router.push('/days');
+  if (!loading && session) router.push('/days');
 
   return (
     <section className="hero is-fullheight is-fullheight-with-navbar">
