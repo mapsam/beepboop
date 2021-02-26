@@ -4,9 +4,11 @@ import Content from '../components/Content.js';
 import { connectToDatabase } from '../utils/mongodb.js';
 import { getSession } from 'next-auth/client';
 import { useState } from 'react'
-import { useRouter } from 'next/router';
 import { ObjectID } from 'mongodb';
-import moment from 'moment';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment);
 
 const newDayTextareaStyle = {
   outline: 'none',
@@ -22,26 +24,46 @@ export async function getServerSideProps(context) {
 
   const { db } = await connectToDatabase();
 
-  const date = new Date();
+  const start = moment().subtract(1, 'month');
+  const end = moment();
+  const range = moment.range(start, end);
+
   const params = {
-    userId: ObjectID(session.userId)
+    userId: ObjectID(session.userId),
+    date: {
+      $lt: end.toDate(),
+      $gte: start.toDate()
+    }
   };
 
-  // if no params provided, default to showing all days in current month
-  if (!Object.keys(context.query).length) {
-    params.year = +date.getFullYear();
-    params.month = +date.getMonth() + 1;
-  }
-
-  if (context.query.year) params.year = +context.query.year;
-  if (context.query.month) params.month = +context.query.month;
-  if (context.query.day) params.day = +context.query.day;
-  if (context.query.weekday) params.weekday = +context.query.weekday;
-
-  const days = await db.collection('days')
+  const dbDays = await db.collection('days')
     .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0, date: 0 }})
     .sort({ year: -1, month: -1, day: -1 })
     .toArray();
+
+  console.log(dbDays);
+
+  const days = Array.from(range.reverseBy('day')).map((day) => {
+    const y = +day.format('YYYY');
+    const m = +day.format('MM');
+    const d = +day.format('DD');
+    const w = +day.format('d');
+
+    let entry = dbDays.find((dbDay) => {
+      return dbDay.year === y && dbDay.month === m && dbDay.day === d;
+    });
+
+    if (!entry) entry = {
+      empty: true,
+      year: y,
+      month: m,
+      day: d,
+      weekday: w
+    };
+
+    // console.log(y, m, d, entry);
+    return entry;
+  });
 
   return { props: { days } };
 }

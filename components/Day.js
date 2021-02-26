@@ -13,18 +13,18 @@ const controlsStyle = {
 
 const Day = props => {
   const [text, setText] = useState(props.children.text);
+  const [empty, setEmpty] = useState(props.children.empty);
   const [visualText, setVisualText] = useState(linkify(text));
   const [edit, setEdit] = useState(false);
   const [editText, setEditText] = useState(props.children.text);
   const [hover, setHover] = useState(false);
   const [deleteConf, setDeleteConf] = useState(false);
-  const [deleted, setDeleted] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const query = `?year=${props.children.year}&month=${props.children.month}&day=${props.children.day}`;
   const permalink = `/days${query}`;
 
-  const updateDay = async(e) => {
+  const upsertDay = async(e) => {
     e.preventDefault();
     setLoading(true);
 
@@ -40,19 +40,23 @@ const Day = props => {
       text: editText
     };
 
+    console.log('aout to submit', body);
+
     const response = await fetch('/api/days', {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json'
       },
       body: JSON.stringify(body)
     });
 
-    await response.json();
+    const res = await response.json();
+
     setText(editText);
     setVisualText(linkify(editText));
     setEdit(false);
     setLoading(false);
+    setEmpty(false);
   };
 
   const deleteDay = async(e) => {
@@ -72,19 +76,21 @@ const Day = props => {
       body: JSON.stringify(body)
     });
 
-    setDeleted(true);
+    setText('');
+    setVisualText('');
+    setEdit(false);
+    setEmpty(true);
+    setDeleteConf(false);
   };
-
-  if (deleted || props.children.empty) return (<div></div>);
 
   return (
     <div
-      className="columns mb-6"
+      className={empty ? "columns mt-2 empty" : "columns mt-6"}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       key={props.children._id}>
-      <div className="column " key={props.children._id + '-date'}>
-        <div className="content has-text-weight-semibold is-size-5">
+      <div className="column" key={props.children._id + '-date'}>
+        <div className={empty ? "content has-text-weight-semibold is-size-6" : "content has-text-weight-semibold is-size-5"}>
           <span className="content">{props.children.year}</span>
           <span className="content mx-1 has-text-dark">.</span>
           <span className="content">{zeros(props.children.month)}</span>
@@ -143,7 +149,7 @@ const Day = props => {
               <button
                 type="submit"
                 className={loading ? "button is-primary has-text-weight-semibold is-loading" : "button is-primary has-text-weight-semibold"}
-                onClick={updateDay}>💾
+                onClick={upsertDay}>💾
               </button>
               <button
                 className="button is-light has-text-weight-semibold"

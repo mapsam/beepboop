@@ -13,44 +13,14 @@ export default async (req, res) => {
   const { db } = await connectToDatabase();
   log(req);
 
-  // create day
+  // upsert day
   if (req.method === 'POST') {
     if (!req.body.year) return res.status(400).json({message: 'no year provided'});
     if (!req.body.month) return res.status(400).json({message: 'no month provided'});
     if (!req.body.day) return res.status(400).json({message: 'no day provided'});
     if (!req.body.text) return res.status(400).json({message: 'no text provided'});
 
-    const now = new Date();
-    const d = new Date(+req.body.year, +req.body.month - 1, +req.body.day);
-
-    const params = {
-      userId: ObjectID(session.userId),
-      year: +req.body.year,
-      month: +req.body.month,
-      day: +req.body.day,
-      weekday: d.getDay(),
-      text: req.body.text,
-      createdAt: now,
-      updatedAt: now,
-      date: d
-    };
-
-    await db.collection('days').insertOne(params);
-
-    return res.json({
-      year: +req.body.year,
-      month: +req.body.month,
-      day: +req.body.day,
-      text: req.body.text
-    });
-
-  // modify day
-  } else if (req.method === 'PUT') {
-    if (!req.body.year) return res.status(400).json({message: 'no year provided'});
-    if (!req.body.month) return res.status(400).json({message: 'no month provided'});
-    if (!req.body.day) return res.status(400).json({message: 'no day provided'});
-    if (!req.body.text) return res.status(400).json({message: 'no text provided'});
-
+    // get then write
     const params = {
       userId: ObjectID(session.userId),
       year: +req.body.year,
@@ -58,16 +28,47 @@ export default async (req, res) => {
       day: +req.body.day
     };
 
-    const set = {
-      $set: {
-        updatedAt: new Date(),
-        text: req.body.text
-      }
-    };
+    const day = await db.collection('days')
+      .findOne(params,
+      {
+        projection: {
+          createdAt: 0,
+          updatedAt: 0,
+          _id: 0,
+          userId: 0
+        }
+      });
 
-    await db.collection('days').updateOne(params, set);
+    const now = new Date();
+    const d = new Date(+req.body.year, +req.body.month - 1, +req.body.day);
 
-    return res.json(201);
+    if (!day) {
+      await db.collection('days').insertOne({
+        createdAt: now,
+        userId: ObjectID(session.userId),
+        year: +req.body.year,
+        month: +req.body.month,
+        day: +req.body.day,
+        weekday: d.getDay(),
+        date: d,
+        text: req.body.text,
+        updatedAt: now
+      });
+    } else {
+      await db.collection('days').updateOne(params, {
+        $set: {
+          text: req.body.text,
+          updatedAt: now
+        }
+      });
+    }
+
+    return res.json({
+      year: +req.body.year,
+      month: +req.body.month,
+      day: +req.body.day,
+      text: req.body.text
+    });
 
   // remove day
   } else if (req.method === 'DELETE') {
@@ -88,7 +89,7 @@ export default async (req, res) => {
 
   // get day(s)
   } else {
-    const params = {
+    let params = {
       userId: ObjectID(session.userId)
     };
 

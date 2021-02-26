@@ -50,10 +50,6 @@ const Nav = () => {
             </div>
 
             <div className="navbar-item">
-              <a className="button is-ghost has-text-weight-bold" href="/new">New</a>
-            </div>
-
-            <div className="navbar-item">
               <a className="circle-button" href="/account">
                 <img style={accountImageButton} src={session.user.image}></img>
               </a>

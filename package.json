@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "next dev",
+    "start-prod": "next build && next start",
     "start:db": "brew services start mongodb-community",
     "stop:db": "brew services stop mongodb-community",
     "db:test": "mongoimport --db daytest --collection days --drop --file ./test/fixtures/days.json",
@@ -28,6 +29,7 @@
     "@zeit/next-sass": "^1.0.1",
     "bulma": "^0.9.1",
     "moment": "^2.29.1",
+    "moment-range": "^4.0.2",
     "mongodb": "^3.6.3",
     "next": "^10.0.0",
     "next-auth": "^3.1.0",
