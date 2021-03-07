@@ -41,8 +41,6 @@ export async function getServerSideProps(context) {
     .sort({ year: -1, month: -1, day: -1 })
     .toArray();
 
-  console.log(dbDays);
-
   const days = Array.from(range.reverseBy('day')).map((day) => {
     const y = +day.format('YYYY');
     const m = +day.format('MM');
@@ -112,37 +110,6 @@ const Page = ({ days }) => {
 
   return (
     <div>
-      <Content columns={true}>
-        <div className="column is-two-thirds">
-          <form>
-            <div className="columns">
-              <div className="column">
-              </div>
-
-              <div className="column is-three-quarters">
-                <div className="field">
-                  <textarea
-                    className="textarea is-size-5 p-0"
-                    rows="1"
-                    style={newDayTextareaStyle}
-                    placeholder={placeholder}
-                    onChange={updateContent}>
-                  </textarea>
-                </div>
-
-                <div className={showSave ? "field" : "field is-invisible"}>
-                  <button
-                    type="submit"
-                    className={loading ? "button is-ghost has-text-weight-semibold is-loading" : "button is-ghost has-text-weight-semibold"}
-                    onClick={submitDay}>💾
-                  </button>
-                </div>
-              </div>
-            </div>
-          </form>
-        </div>
-      </Content>
-
       <Content columns={true}>
         <div className="column is-two-thirds">
           {ds.map((day) => (

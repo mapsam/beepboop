@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { weekday, zeros } from '../utils/date.js';
 import { linkify } from '../utils/linkify.js';
+import moment from 'moment';
 
 const dayTextStyle = {
   whiteSpace: 'pre-wrap'
@@ -10,6 +11,11 @@ const controlsStyle = {
   letterSpacing: '0.1em',
   fontSize: '0.85em',
 };
+
+const isToday = (dbDay) => {
+  console.log(`${dbDay.year}-${dbDay.month}-${dbDay.day}`, moment().format('YYYY-M-D'));
+  return moment().format('YYYY-M-D') === `${dbDay.year}-${dbDay.month}-${dbDay.day}`;
+}
 
 const Day = props => {
   const [text, setText] = useState(props.children.text);
@@ -83,9 +89,19 @@ const Day = props => {
     setDeleteConf(false);
   };
 
+  let dayClass = 'day-container columns';
+  if (empty) {
+    dayClass += ' mt-2 empty';
+  } else {
+    dayClass += ' mt-6';
+  }
+  if (isToday(props.children)) {
+    dayClass += ' today'
+  }
+
   return (
     <div
-      className={empty ? "columns mt-2 empty" : "columns mt-6"}
+      className={dayClass}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
       key={props.children._id}>
@@ -107,7 +123,7 @@ const Day = props => {
           <div className="content">
 
             {/* CONTENT HERE */}
-            <p className="content has-text-weight-normal" dangerouslySetInnerHTML={{__html: visualText}}></p>
+            <p className="day-text content has-text-weight-normal" dangerouslySetInnerHTML={{__html: visualText}}></p>
             {/* END CONTENT */}
 
             <div className={hover ? '' : 'is-invisible-desktop'} style={controlsStyle}>
@@ -139,7 +155,7 @@ const Day = props => {
           <form>
             <div className="field">
               <textarea
-                className="textarea"
+                className="day-text content has-text-weight-normal textarea"
                 rows="12"
                 value={editText}
                 onChange={e => setEditText(e.target.value)}>
