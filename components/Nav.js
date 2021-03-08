@@ -16,57 +16,69 @@ const Nav = () => {
   const [ session, loading ] = useSession();
   const router = useRouter();
 
-  // sticky nav on landing page
-  const navClass = router.pathname === '/' ? 'navbar is-fixed-top is-transparent' : 'navbar is-transparent';
-
   return (
-    <nav className={navClass} role="navigation" aria-label="main navigation">
-      <div className="navbar-brand">
-        <a className="navbar-item" href="/">
-          <ReactSVG src="/robot.svg" className="robot mr-3"/>
-          <h1 className="title">
-            beepboop.
-          </h1>
-        </a>
+    <div className="navbar is-transparent border-bottom mb-6">
+      <a className="navbar-item px-0" href="/">
+        <p className="is-size-5 has-text-primary">beepboop ✏️</p>
+      </a>
 
-        <a
-          role="button"
-          className={expand ? 'navbar-burger is-active' : 'navbar-burger'}
-          aria-label="menu"
-          aria-expanded="false"
-          data-target="navbarBasicExample"
-          onClick={() => setExpand(!expand)}>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-          <span aria-hidden="true"></span>
-        </a>
+      <div className="navbar-end">
+      {session &&
+        <div className="navbar-item">
+          <a className="circle-button" href="/account">
+            <img style={accountImageButton} src={session.user.image}></img>
+          </a>
+        </div>
+      }
+      {!session &&
+        <div className="navbar-item">
+          <button className="button is-primary" onClick={signIn}>
+            <strong>Sign in</strong>
+          </button>
+        </div>
+      }
       </div>
+    </div>
+    // <nav className="navbar is-transparent border-bottom mb-6" role="navigation" aria-label="main navigation">
+    //   <div className="navbar-brand">
+    //     <a className="navbar-item" href="/">
+    //       <p className="is-size-5"><strong>beepboop</strong> ✏️</p>
+    //     </a>
 
-      <div className={expand ? 'navbar-menu is-active' : 'navbar-menu'}>
-        {session &&
-          <div className="navbar-end">
-            <div className="navbar-item">
-              <a className="button is-light has-text-weight-medium" href="/days">Days</a>
-            </div>
+    //     <a
+    //       role="button"
+    //       className={expand ? 'navbar-burger is-active' : 'navbar-burger'}
+    //       aria-label="menu"
+    //       aria-expanded="false"
+    //       data-target="navbarBasicExample"
+    //       onClick={() => setExpand(!expand)}>
+    //       <span aria-hidden="true"></span>
+    //       <span aria-hidden="true"></span>
+    //       <span aria-hidden="true"></span>
+    //     </a>
+    //   </div>
 
-            <div className="navbar-item">
-              <a className="circle-button" href="/account">
-                <img style={accountImageButton} src={session.user.image}></img>
-              </a>
-            </div>
-          </div>
-        }
-        {!session &&
-          <div className="navbar-end">
-            <div className="navbar-item">
-              <button className="button is-primary" onClick={signIn}>
-                <strong>Sign in</strong>
-              </button>
-            </div>
-          </div>
-        }
-      </div>
-    </nav>
+    //   <div className={expand ? 'navbar-menu is-active' : 'navbar-menu'}>
+    //     {session &&
+    //       <div className="navbar-end">
+    //         <div className="navbar-item">
+    //           <a className="circle-button" href="/account">
+    //             <img style={accountImageButton} src={session.user.image}></img>
+    //           </a>
+    //         </div>
+    //       </div>
+    //     }
+    //     {!session &&
+    //       <div className="navbar-end">
+    //         <div className="navbar-item">
+    //           <button className="button is-primary" onClick={signIn}>
+    //             <strong>Sign in</strong>
+    //           </button>
+    //         </div>
+    //       </div>
+    //     }
+    //   </div>
+    // </nav> */}
   );
 };
 

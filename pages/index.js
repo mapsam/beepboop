@@ -8,9 +8,9 @@ const Account = ({ days }) => {
   if (!loading && session) router.push('/days');
 
   return (
-    <section className="hero is-fullheight is-fullheight-with-navbar">
+    <section className="hero">
       <div className="hero-body">
-        <div className="container is-max-desktop has-text-centered">
+        <div className="container is-max-desktop has-text-centered has-text-primary">
           <h2 className="is-size-5">
             <span className="underline">beepboop</span> is a simple, daily journal.<br />Jot down your feelings, tally your day, or write a poem.<br />Free, private, and built with love ❤️
           </h2>

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/client';
-import Content from '../components/Content.js';
 
 export default function Account () {
   const [ session, loading ] = useSession();
@@ -31,62 +30,56 @@ export default function Account () {
 
   // If session exists, display content
   return (
-    <Content columns={true}>
-      <div className="column is-two-thirds">
-
-        <div className="block content">
-          <h1 className="has-text-weight-bold title is-1">Account</h1>
-          <p class="block">
-            This is your account page. You can view your account settings, logout, download
-            your account data, or delete your account.</p>
-        </div>
-
-        <div className="columns mt-6">
-          <div className="column has-text-weight-semibold is-size-5">
-            Settings
-          </div>
-          <div className="column content is-three-quarters">
-            <p class="block">
-              Account settings are defined by the identify provider you used to sign in.
-              If you want to edit these you must make changes in that service.
-            </p>
-            <p><strong>Email</strong>: {email}</p>
-            <p><strong>Name</strong>: {name}</p>
-          </div>
-        </div>
-
-        <div className="columns mt-6">
-          <div className="column has-text-weight-semibold is-size-5">
-            Data
-          </div>
-          <div className="column content is-three-quarters">
-            <p><strong>Download account data.</strong> This will download <span class="is-italic">all</span> days associated to your account.</p>
-            <button class="button is-info has-text-weight-semibold mr-2 " onClick={signOut} disabled>CSV</button>
-            <button class="button is-info has-text-weight-semibold mr-2 " onClick={signOut} disabled>JSON</button>
-          </div>
-        </div>
-
-        <div className="columns mt-6">
-          <div className="column has-text-weight-semibold is-size-5">
-            Goodbye
-          </div>
-          <div className="column content is-three-quarters">
-            <div className="block">
-              <p><strong>Logout</strong> of your current session.</p>
-              <button class="button is-ghost " onClick={signOut}>Logout</button>
-            </div>
-
-            <div className="block">
-              <p><strong>Delete your account.</strong> This is a permanent action! If you want a record of your data, be sure to download it before deleting your account.</p>
-              <button class="button is-danger has-text-weight-bold" onClick={signOut} disabled>Delete account</button>
-            </div>
-          </div>
-        </div>
-
-
-
+    <div>
+      <div className="block content">
+        <h1 className="has-text-primary has-text-weight-bold title">Account</h1>
+        <p class="has-text-primary block">
+          This is your account page. You can view your account settings, logout, download
+          your account data, or delete your account.</p>
       </div>
-      <div class="column is-one-third"></div>
-    </Content>
+
+      <div className="columns mt-6">
+        <div className="column has-text-weight-semibold">
+          <h2 className="is-size-5 has-text-weight-semibold has-text-primary">Settings</h2>
+        </div>
+        <div className="column content is-three-quarters">
+          <p class="block has-text-primary">
+            Account settings are defined by the identify provider you used to sign in.
+            If you want to edit these you must make changes in that service.
+          </p>
+          <p className="has-text-primary"><span className="underline has-text-weight-bold">Email</span>: {email}</p>
+          <p className="has-text-primary"><span className="underline has-text-weight-bold">Name</span>: {name}</p>
+        </div>
+      </div>
+
+      <div className="columns mt-6">
+        <div className="column">
+          <h2 className="is-size-5 has-text-weight-semibold has-text-primary">Data</h2>
+        </div>
+        <div className="column content is-three-quarters">
+          <p className="has-text-primary"><span className="underline has-text-weight-semibold">Download account data.</span> This will download <span class="is-italic">all</span> days associated to your account.</p>
+          <button class="button is-info has-text-weight-semibold mr-2 " onClick={signOut} disabled>CSV</button>
+          <button class="button is-info has-text-weight-semibold mr-2 " onClick={signOut} disabled>JSON</button>
+        </div>
+      </div>
+
+      <div className="columns mt-6">
+        <div className="column">
+          <h2 className="is-size-5 has-text-weight-semibold has-text-primary">Goodbye</h2>
+        </div>
+        <div className="column content is-three-quarters">
+          <div className="block">
+            <p className="has-text-primary"><span className="underline has-text-weight-semibold">Logout</span> of your current session.</p>
+            <button class="button is-ghost " onClick={signOut}>Logout</button>
+          </div>
+
+          <div className="block">
+            <p className="has-text-primary"><span className="underline has-text-weight-semibold">Delete your account.</span> This is a permanent action! If you want a record of your data, be sure to download it before deleting your account.</p>
+            <button class="button is-danger has-text-weight-bold" onClick={signOut} disabled>Delete account</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
   )
 }

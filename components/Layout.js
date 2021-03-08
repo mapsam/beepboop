@@ -7,11 +7,21 @@ const Layout = props => {
 
   if (loading) return (<div></div>);
 
-  return (<div className='Layout'>
-    <Nav />
-    {props.children}
-    <Footer />
-  </div>)
+  return (
+    <div className='Layout'>
+      <section className='container is-max-desktop'>
+        <Nav />
+      </section>
+
+      <section className='container is-max-desktop'>
+        {props.children}
+      </section>
+
+      <section className='container is-max-desktop'>
+        <Footer />
+      </section>
+    </div>
+  )
 };
 
 export default Layout;

@@ -1,21 +1,23 @@
 @charset "utf-8";
-// @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;700&display=swap');
-// $family-sans-serif: 'Noto Serif JP', serif
 
 @import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 $family-primary: 'Lora', serif
-// $family-secondary:
 
 // colors
-$dark: #120B17
-
-// globals
-html
-  background-color: $dark
+$dark: #1e1226
+$semi-dark: #422e4f
+$primary: #eeeeee
 
 *::-webkit-clear-button
   display: none
   -webkit-appearance: none
+
+html, .navbar
+  background: $dark !important
+
+// bulma variable overrides
+$desktop: 700px
+$container-max-width: 700px
 
 input[type="date"]
   -webkit-appearance: none
@@ -27,6 +29,13 @@ input:focus
   max-width: 35px
   height: auto
   opacity: 0.7
+
+.border-top
+  border-top: 1px solid $semi-dark
+  padding-bottom:
+
+.border-bottom
+  border-bottom: 1px solid $semi-dark
 
 // custom helpers
 /* https://unsplash.com/photos/x2Tmfd1-SgA */
@@ -44,8 +53,8 @@ input:focus
   border-radius: 100%
   overflow: hidden
   line-height: 0
-  height: 40px
-  width: 40px
+  height: 25px
+  width: 25px
 
 .textarea-new-day
   border: none
@@ -55,8 +64,8 @@ input:focus
   box-shadow: none
   resize: none
 
-  ::placeholder
-    color: $dark
+  // ::placeholder
+  //   color: $dark
 
 .today
   font-size: 1.14em
@@ -66,4 +75,4 @@ input:focus
 .day-container
 
 // import bulma
-@import "../node_modules/bulma/bulma.sass"
+@import "bulma"

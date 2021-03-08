@@ -107,20 +107,20 @@ const Day = props => {
       key={props.children._id}>
       <div className="column" key={props.children._id + '-date'}>
         <div className={empty ? "content has-text-weight-semibold is-size-6" : "content has-text-weight-semibold is-size-5"}>
-          <span className="content">{props.children.year}</span>
-          <span className="content mx-1 has-text-dark">.</span>
-          <span className="content">{zeros(props.children.month)}</span>
-          <span className="content mx-1 has-text-dark">.</span>
-          <span className="content">{zeros(props.children.day)}</span>
+          <span className="content has-text-primary">{props.children.year}</span>
+          <span className="content mx-1 has-text-warning">.</span>
+          <span className="content has-text-primary">{zeros(props.children.month)}</span>
+          <span className="content mx-1 has-text-warning">.</span>
+          <span className="content has-text-primary">{zeros(props.children.day)}</span>
           <br />
-          <span className="has-text-grey-light has-text-weight-light is-size-6">
+          <span className="has-text-primary has-text-weight-light is-size-6">
             {weekday(props.children.weekday)}
           </span>
         </div>
       </div>
       <div className="column is-three-quarters has-text-weight-medium" style={dayTextStyle} key={props.children._id + '-content'}>
         {!edit &&
-          <div className="content">
+          <div className="content has-text-primary">
 
             {/* CONTENT HERE */}
             <p className="day-text content has-text-weight-normal" dangerouslySetInnerHTML={{__html: visualText}}></p>
