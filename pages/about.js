@@ -1,7 +1,6 @@
-import Content from '../components/Content';
 import Link from 'next/link';
 
-export default About = ({ days }) => (
+const About = ({ days }) => (
   <div className="content">
     <h1 className="has-text-weight-bold title">About</h1>
     <p><i>Schmeep schmoop!</i></p>
@@ -26,3 +25,5 @@ export default About = ({ days }) => (
     </p>
   </div>
 );
+
+export default About;
