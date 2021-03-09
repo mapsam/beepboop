@@ -1,22 +1,11 @@
 import Day from '../components/Day.js';
-import DayFilters from '../components/DayFilters.js';
-import Content from '../components/Content.js';
 import { connectToDatabase } from '../utils/mongodb.js';
-import { getSession } from 'next-auth/client';
+import { fillDays } from '../utils/date.js';
+import { getSession, useSession } from 'next-auth/client';
+import { useRouter } from 'next/router';
 import { useState } from 'react'
 import { ObjectID } from 'mongodb';
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-
-const moment = extendMoment(Moment);
-
-const newDayTextareaStyle = {
-  outline: 'none',
-  border: 'none',
-  boxShadow: 'none',
-  borderBottome: '1px solid #c0c0c0',
-  resize: 'none'
-};
+import moment from 'moment';
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
@@ -26,7 +15,6 @@ export async function getServerSideProps(context) {
 
   const start = moment().subtract(1, 'month');
   const end = moment();
-  const range = moment.range(start, end);
 
   const params = {
     userId: ObjectID(session.userId),
@@ -41,80 +29,65 @@ export async function getServerSideProps(context) {
     .sort({ year: -1, month: -1, day: -1 })
     .toArray();
 
-  const days = Array.from(range.reverseBy('day')).map((day) => {
-    const y = +day.format('YYYY');
-    const m = +day.format('MM');
-    const d = +day.format('DD');
-    const w = +day.format('d');
-
-    let entry = dbDays.find((dbDay) => {
-      return dbDay.year === y && dbDay.month === m && dbDay.day === d;
-    });
-
-    if (!entry) entry = {
-      empty: true,
-      year: y,
-      month: m,
-      day: d,
-      weekday: w
-    };
-
-    // console.log(y, m, d, entry);
-    return entry;
-  });
-
-  return { props: { days } };
+  return { props: { days: fillDays(dbDays, start, end), start: start.subtract(1, 'day').format('YYYY-MM-DD') } };
 }
 
-const Page = ({ days }) => {
+export default function Page ({ days, start }) {
+  const router = useRouter();
+  const [ session, loading ] = useSession();
   const [ ds, setDays ] = useState(days);
-  const [ dayDate, setDate ] = useState(new Date());
-  const [ content, setContent ] = useState('');
-  const [ placeholder ] = useState(`What did you do on ${moment(dayDate).format('dddd, MMMM Do')}?`);
-  const [ loading, setLoading ] = useState(false);
-  const [ showSave, setShowSave ] = useState(false);
+  const [ nextDate, setNextDate ] = useState(start);
+  const [ loadingDays, setLoadingDays ] = useState(false);
+  const [ noMoreDays, setNoMoreDays ] = useState(false);
 
-  const submitDay = async (e) => {
+  async function loadMoreDays(e) {
     e.preventDefault();
+    setLoadingDays(true);
+    const endD = moment(nextDate);
+    const startD = moment(nextDate).subtract(1, 'month');
 
-    const body = {
-      year: dayDate.getFullYear(),
-      month: dayDate.getMonth() + 1,
-      day: dayDate.getDate(),
-      text: content
-    }
-
-    const response = await fetch('/api/days', {
-      method: 'POST',
+    const response = await fetch(`/api/days?between=${startD.format('YYYY-MM-DD')}:${endD.format('YYYY-MM-DD')}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(body) // body data type must match "Content-Type" header
+      }
     });
 
-    const json = await response.json();
-    return window.location.reload();
-  };
+    const res = await response.json();
 
-  const updateContent = async(e) => {
-    e.preventDefault();
-    setContent(e.target.value);
-    e.target.style.height = 'auto';
-    e.target.style.height = e.target.scrollHeight + 'px';
-    if (e.target.value.length > 0) {
-      setShowSave(true);
+    if (!res.length) {
+      setNoMoreDays(true);
     } else {
-      setShowSave(false);
+      const filled = fillDays(res, startD, endD);
+      setNextDate(startD.subtract(1, 'day').format('YYYY-MM-DD'));
+      setDays(ds.concat(filled));
     }
-  };
+
+    setLoadingDays(false);
+  }
+
+  // If no session exists return to home page
+  if (loading && !session) router.push('/');
 
   return (
     <div className="days-all">
       {ds.map((day) => (
         <Day>{day}</Day>
       ))}
+
+      <div className="content has-text-primary has-text-centered">
+        {noMoreDays &&
+          <p>✋ No more days!</p>
+        }
+
+        {!noMoreDays &&
+          <button
+            className={loadingDays ? "button is-info has-text-weight-semibold is-loading" : "button is-info has-text-weight-semibold"}
+            onClick={loadMoreDays}>
+              Load more days
+          </button>
+        }
+      </div>
     </div>
   );
-};
-
-export default Page;
+}

@@ -1,11 +1,12 @@
 import { signIn, signOut, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 
-const Account = ({ days }) => {
-  const router = useRouter()
+export default function Index() {
+  const router = useRouter();
   const [ session, loading ] = useSession();
+  if (loading) return (<div></div>);
 
-  if (!loading && session) router.push('/days');
+  if (session) router.push('/days');
 
   return (
     <section className="hero">
@@ -30,6 +31,4 @@ const Account = ({ days }) => {
       </div>
     </section>
   );
-};
-
-export default Account;
+}

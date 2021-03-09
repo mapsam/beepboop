@@ -1,6 +1,7 @@
 import { getSession } from 'next-auth/client';
 import { connectToDatabase, dayId } from '../../../utils/mongodb.js';
 import { ObjectID } from 'mongodb';
+import moment from 'moment';
 
 function log(request) {
   console.log(`${request.method} ${request.url} ${JSON.stringify(request.body)}`);
@@ -89,20 +90,42 @@ export default async (req, res) => {
 
   // get day(s)
   } else {
-    let params = {
-      userId: ObjectID(session.userId)
-    };
+    if (req.query.between) {
+      const dates = req.query.between.split(':');
+      const start = moment(dates[0]);
+      const end = moment(dates[1]);
 
-    if (req.query.year) params.year = +req.query.year;
-    if (req.query.month) params.month = +req.query.month;
-    if (req.query.day) params.day = +req.query.day;
-    if (req.query.weekday) params.weekday = +req.query.weekday;
+      const params = {
+        userId: ObjectID(session.userId),
+        date: {
+          $lt: end.toDate(),
+          $gte: start.toDate()
+        }
+      };
 
-    const days = await db.collection('days')
-      .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0 }})
-      .sort({ year: -1, month: -1, day: -1 })
-      .toArray();
+      const days = await db.collection('days')
+        .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0, date: 0 }})
+        .sort({ year: -1, month: -1, day: -1 })
+        .toArray();
 
-    return res.json(days);
+      return res.json(days);
+
+    } else {
+      let params = {
+        userId: ObjectID(session.userId)
+      };
+
+      if (req.query.year) params.year = +req.query.year;
+      if (req.query.month) params.month = +req.query.month;
+      if (req.query.day) params.day = +req.query.day;
+      if (req.query.weekday) params.weekday = +req.query.weekday;
+
+      const days = await db.collection('days')
+        .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0 }})
+        .sort({ year: -1, month: -1, day: -1 })
+        .toArray();
+
+      return res.json(days);
+    }
   }
 }

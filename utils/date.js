@@ -67,3 +67,32 @@ export function zeros(i) {
   if (i < 10) return '0' + i;
   return i;
 }
+
+export function isToday(y, m, d) {
+  return moment().format('YYYY-M-D') === `${y}-${m}-${d}`;
+}
+
+export function fillDays(list, start, end) {
+  const range = moment.range(start, end);
+
+  return Array.from(range.reverseBy('day')).map((day) => {
+    const y = +day.format('YYYY');
+    const m = +day.format('MM');
+    const d = +day.format('DD');
+    const w = +day.format('d');
+
+    let entry = list.find((dbDay) => {
+      return dbDay.year === y && dbDay.month === m && dbDay.day === d;
+    });
+
+    if (!entry) entry = {
+      empty: true,
+      year: y,
+      month: m,
+      day: d,
+      weekday: w
+    };
+
+    return entry;
+  });
+}

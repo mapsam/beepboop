@@ -1,8 +1,8 @@
 import Link from 'next/link';
 
 const About = ({ days }) => (
-  <div className="content">
-    <h1 className="has-text-weight-bold title">About</h1>
+  <div className="content has-text-primary">
+    <h1 className="has-text-weight-bold title has-text-primary">About</h1>
     <p><i>Schmeep schmoop!</i></p>
     <p>
       Beepboop is a project created and maintained by <Link href="http://mapsam.com">Sam Matthews</Link>. The goal is to provide a space for writing <i>every</i> day, no matter what.
@@ -13,15 +13,15 @@ const About = ({ days }) => (
     </p>
 
     <p>
-      <strong>Why is it called beepboop?</strong> Originally, this project was called "Day" or "Day project", which definitely makes more sense than beepboop. But once it was time to start branding and writing, the word <i>day</i> was just kind of boring. Beepboop is vague, cute, and kind of sounds like a tiny robot. Plus it's a small sound that represents a single entry in this application. Additionally, beepboop rhymes with meepmoop and bleepbloop.
+      <span className="has-text-weight-bold underline">Why is it called beepboop?</span> Originally, this project was called "Day" or "Day project", which definitely makes more sense than beepboop. But once it was time to start branding and writing, the word <i>day</i> was just kind of boring. Beepboop is vague, cute, and kind of sounds like a tiny robot. Plus it's a small sound that represents a single entry in this application. Additionally, beepboop rhymes with meepmoop and bleepbloop.
     </p>
 
     <p>
-      <strong>How can I provide feedback?</strong> Jump on over to <Link href="https://github.com/mapsam/beepboop">GitHub</Link> to view the source code and add some comments.
+      <span className="has-text-weight-bold underline">How can I provide feedback?</span> Jump on over to <Link href="https://github.com/mapsam/beepboop">GitHub</Link> to view the source code and add some comments.
     </p>
 
     <p>
-      <strong>How can I get involved?</strong> Ditto.
+      <span className="has-text-weight-bold underline">How can I get involved?</span> Ditto.
     </p>
   </div>
 );

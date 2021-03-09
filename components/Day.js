@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
-import { weekday, zeros } from '../utils/date.js';
+import { useState } from 'react';
+import { weekday, zeros, isToday } from '../utils/date.js';
 import { linkify } from '../utils/linkify.js';
-import moment from 'moment';
 
 const dayTextStyle = {
   whiteSpace: 'pre-wrap'
@@ -12,12 +11,7 @@ const controlsStyle = {
   fontSize: '0.85em',
 };
 
-const isToday = (dbDay) => {
-  console.log(`${dbDay.year}-${dbDay.month}-${dbDay.day}`, moment().format('YYYY-M-D'));
-  return moment().format('YYYY-M-D') === `${dbDay.year}-${dbDay.month}-${dbDay.day}`;
-}
-
-const Day = props => {
+export default function Day(props) {
   const [text, setText] = useState(props.children.text);
   const [empty, setEmpty] = useState(props.children.empty);
   const [visualText, setVisualText] = useState(linkify(text));
@@ -35,7 +29,6 @@ const Day = props => {
     setLoading(true);
 
     if (editText == text) {
-      console.log('no changes to save');
       return;
     };
 
@@ -45,8 +38,6 @@ const Day = props => {
       day: props.children.day,
       text: editText
     };
-
-    console.log('aout to submit', body);
 
     const response = await fetch('/api/days', {
       method: 'POST',
@@ -83,6 +74,7 @@ const Day = props => {
     });
 
     setText('');
+    setEditText('');
     setVisualText('');
     setEdit(false);
     setEmpty(true);
@@ -95,7 +87,7 @@ const Day = props => {
   } else {
     dayClass += ' mt-6';
   }
-  if (isToday(props.children)) {
+  if (isToday(props.children.year, props.children.month, props.children.day)) {
     dayClass += ' today'
   }
 
@@ -129,22 +121,24 @@ const Day = props => {
             <div className={hover ? '' : 'is-invisible-desktop'} style={controlsStyle}>
               <div className="columns buttons are-small has-text-weight-semibold">
                 <div className="column is-one-fifth">
-                  <a className="button is-ghost is-fullwidth" href={permalink}>🔗</a>
+                  <a className="button is-info is-fullwidth" onClick={e => setEdit(true)}>✏️</a>
                 </div>
+
                 <div className="column is-one-fifth">
-                  <a className="button is-ghost is-fullwidth" onClick={e => setEdit(true)}>✏️</a>
+                  {!empty &&
+                    <div>
+                    {deleteConf &&
+                      <a className="button is-danger is-fullwidth" onClick={deleteDay}>🗑 ?</a>
+                    }
+                    {!deleteConf &&
+                      <a className="button is-info is-fullwidth" onClick={e => setDeleteConf(true)}>🗑</a>
+                    }
+                    </div>
+                  }
                 </div>
                 <div className="column is-one-fifth">
                   {deleteConf &&
-                    <a className="button is-danger is-fullwidth" onClick={deleteDay}>🔪 ?</a>
-                  }
-                  {!deleteConf &&
-                    <a className="button is-ghost is-fullwidth" onClick={e => setDeleteConf(true)}>🔪</a>
-                  }
-                </div>
-                <div className="column is-one-fifth">
-                  {deleteConf &&
-                    <a className="button is-light" onClick={e => setDeleteConf(false)}>🙅‍♀️ nvm</a>
+                    <a className="button is-info" onClick={e => setDeleteConf(false)}>🙅‍♀️ nvm</a>
                   }
                 </div>
               </div>
@@ -155,7 +149,7 @@ const Day = props => {
           <form>
             <div className="field">
               <textarea
-                className="day-text content has-text-weight-normal textarea"
+                className="day-textarea textarea content has-text-weight-normal has-text-primary"
                 rows="12"
                 value={editText}
                 onChange={e => setEditText(e.target.value)}>
@@ -164,11 +158,11 @@ const Day = props => {
             <div className="buttons are-small">
               <button
                 type="submit"
-                className={loading ? "button is-primary has-text-weight-semibold is-loading" : "button is-primary has-text-weight-semibold"}
-                onClick={upsertDay}>💾
+                className={loading ? "button is-info has-text-weight-semibold is-loading" : "button is-info has-text-weight-semibold"}
+                onClick={upsertDay}>💾 save
               </button>
               <button
-                className="button is-light has-text-weight-semibold"
+                className="button is-info has-text-weight-semibold"
                 onClick={e => setEdit(false)}>🙅‍♀️ nvm
               </button>
             </div>
@@ -177,6 +171,4 @@ const Day = props => {
       </div>
     </div>
   );
-};
-
-export default Day;
+}
