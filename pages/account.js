@@ -33,7 +33,7 @@ export default function Account () {
 
   // If session exists, display content
   return (
-    <div>
+    <div className="is-size-5">
       <div className="block content">
         <h1 className="has-text-primary has-text-weight-bold title">Account</h1>
         <p class="has-text-primary block">

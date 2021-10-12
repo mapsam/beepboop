@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 const About = ({ days }) => (
-  <div className="content has-text-primary">
+  <div className="content has-text-primary is-size-5">
     <h1 className="has-text-weight-bold title has-text-primary">About</h1>
     <p><i>Schmeep schmoop!</i></p>
     <p>
@@ -23,6 +23,9 @@ const About = ({ days }) => (
     <p>
       <span className="has-text-weight-bold underline">How can I get involved?</span> Ditto.
     </p>
+
+    <h1 className="has-text-weight-bold title has-text-primary">Privacy Policy</h1>
+    <p>Beepboop is not responsible for data privacy issues. This website is hosted for free. If you have any concerns or wish to delete your account please reach out to <Link href="matthews.sam@gmail.com">Sam Matthews</Link>.</p>
   </div>
 );
 
