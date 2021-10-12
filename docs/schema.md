@@ -20,66 +20,17 @@ List days for an account. Defaults to all days within the current month.
 
 `db.days.find()`
 
-```
+```js
 {
   "_id": ObjectId("asdf"),
-  "created": "date",
-  "modified": "date",
-  "year": "int",
-  "month": "int",
-  "day": "int",
-  "weekday": "int",
-  "text": "string",
-  "location": "object<Location>",
-  "account": "object<Account>",
-  "image": {
-    "data": "binData",
-    "type": "string"
-  }
+  "userId": ObjectId("1234"),
+  "text": "the thing happened!",
+  "year": 2020,
+  "month": 11,
+  "day": 8,
+  "weekday": 0,
+  "date": 1604793600000,
+  "createdAt": 1605982636061,
+  "updatedAt": 1605982636061
 }
 ```
-
-Indexes
-
-* year
-* month
-* day
-* weekday
-* account
-
-### users
-
-```
-{
-  "_id" : ObjectId("asdf"),
-  "name" : "Leslie Knope",
-  "email" : "leslie.knope@gmail.com",
-  "image" : "https://lh3.googleusercontent.com/...",
-  "createdAt" : ISODate("2020-11-07T01:30:52.997Z")
-  "updatedAt" : ISODate("2020-11-07T01:30:52.997Z")
-}
-```
-
-### images
-
-`Image`
-
-```
-{
-  "_id":
-}
-```
-
-### locations
-
-`Location`
-
-```
-{
-  "_id": "...",
-  "date": "date",
-  "text": "string",
-  "location": "object<Location>"
-}
-```
-

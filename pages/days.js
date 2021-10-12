@@ -1,11 +1,10 @@
 import Day from '../components/Day.js';
 import { connectToDatabase } from '../utils/mongodb.js';
-import { fillDays } from '../utils/date.js';
+import { today, isToday } from '../utils/date.js';
 import { getSession, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useState } from 'react'
 import { ObjectID } from 'mongodb';
-import moment from 'moment';
 
 export async function getServerSideProps(context) {
   const session = await getSession(context);
@@ -13,40 +12,41 @@ export async function getServerSideProps(context) {
 
   const { db } = await connectToDatabase();
 
-  const start = moment().subtract(1, 'month');
-  const end = moment();
-
   const params = {
-    userId: ObjectID(session.userId),
-    date: {
-      $lt: end.toDate(),
-      $gte: start.toDate()
-    }
+    userId: ObjectID(session.userId)
   };
 
-  const dbDays = await db.collection('days')
+  const days = await db.collection('days')
     .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0, date: 0 }})
     .sort({ year: -1, month: -1, day: -1 })
+    .skip(0)
+    .limit(30)
     .toArray();
 
-  return { props: { days: fillDays(dbDays, start, end), start: start.subtract(1, 'day').format('YYYY-MM-DD') } };
+  // add "today" if it doesn't already exist in database
+  // this is how users are able to record "today" for starters
+  if (!isToday(days[0].year, days[0].month, days[0].day)) {
+    const filler = today();
+    filler._empty = true;
+    days.unshift(filler);
+  }
+
+  return { props: { days } };
 }
 
-export default function Page ({ days, start }) {
+export default function Page ({ days }) {
   const router = useRouter();
   const [ session, loading ] = useSession();
   const [ ds, setDays ] = useState(days);
-  const [ nextDate, setNextDate ] = useState(start);
+  const [ page, setPage ] = useState(2);
   const [ loadingDays, setLoadingDays ] = useState(false);
   const [ noMoreDays, setNoMoreDays ] = useState(false);
 
   async function loadMoreDays(e) {
     e.preventDefault();
     setLoadingDays(true);
-    const endD = moment(nextDate);
-    const startD = moment(nextDate).subtract(1, 'month');
 
-    const response = await fetch(`/api/days?between=${startD.format('YYYY-MM-DD')}:${endD.format('YYYY-MM-DD')}`, {
+    const response = await fetch(`/api/days?page=${page}`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json'
@@ -54,13 +54,13 @@ export default function Page ({ days, start }) {
     });
 
     const res = await response.json();
+    console.log(res);
 
     if (!res.length) {
       setNoMoreDays(true);
     } else {
-      const filled = fillDays(res, startD, endD);
-      setNextDate(startD.subtract(1, 'day').format('YYYY-MM-DD'));
-      setDays(ds.concat(filled));
+      setPage(page + 1);
+      setDays(ds.concat(res));
     }
 
     setLoadingDays(false);
@@ -72,7 +72,14 @@ export default function Page ({ days, start }) {
   return (
     <div className="days-all">
       {ds.map((day) => (
-        <Day>{day}</Day>
+        <Day
+          _id={day._id}
+          empty={day._empty}
+          text={day.text}
+          year={day.year}
+          month={day.month}
+          day={day.day}
+          weekday={day.weekday} />
       ))}
 
       <div className="content has-text-primary has-text-centered">

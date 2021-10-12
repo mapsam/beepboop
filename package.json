@@ -16,15 +16,15 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mapsam/day.git"
+    "url": "git+https://github.com/mapsam/beepboop.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/mapsam/day/issues"
+    "url": "https://github.com/mapsam/beepboop/issues"
   },
-  "homepage": "https://github.com/mapsam/day#readme",
+  "homepage": "https://github.com/mapsam/beepboop#readme",
   "dependencies": {
     "@zeit/next-sass": "^1.0.1",
     "bulma": "^0.9.1",

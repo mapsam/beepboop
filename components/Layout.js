@@ -8,7 +8,7 @@ const Layout = props => {
   if (loading) return (<div></div>);
 
   return (
-    <div className='Layout'>
+    <div className='p-3'>
       <section className='container is-max-desktop'>
         <Nav />
       </section>
