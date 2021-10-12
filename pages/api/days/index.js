@@ -16,10 +16,10 @@ export default async (req, res) => {
 
   // upsert day
   if (req.method === 'POST') {
-    if (!req.body.year) return res.status(400).json({message: 'no year provided'});
-    if (!req.body.month) return res.status(400).json({message: 'no month provided'});
-    if (!req.body.day) return res.status(400).json({message: 'no day provided'});
-    if (!req.body.text) return res.status(400).json({message: 'no text provided'});
+    if (!req.body.year) return res.status(400).json({ message: 'no year provided' });
+    if (!req.body.month) return res.status(400).json({ message: 'no month provided' });
+    if (!req.body.day) return res.status(400).json({ message: 'no day provided' });
+    if (!req.body.text) return res.status(400).json({ message: 'no text provided' });
 
     // get then write
     const params = {
@@ -73,9 +73,9 @@ export default async (req, res) => {
 
   // remove day
   } else if (req.method === 'DELETE') {
-    if (!req.body.year) return res.status(400).json({message: 'no year provided'});
-    if (!req.body.month) return res.status(400).json({message: 'no month provided'});
-    if (!req.body.day) return res.status(400).json({message: 'no day provided'});
+    if (!req.body.year) return res.status(400).json({ message: 'no year provided' });
+    if (!req.body.month) return res.status(400).json({ message: 'no month provided' });
+    if (!req.body.day) return res.status(400).json({ message: 'no day provided' });
 
     const params = {
       userId: ObjectID(session.userId),
