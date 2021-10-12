@@ -12,17 +12,14 @@ const controlsStyle = {
 };
 
 export default function Day(props) {
-  const [text, setText] = useState(props.children.text);
-  const [empty, setEmpty] = useState(props.children.empty);
+  const [text, setText] = useState(props.text);
+  const [empty, setEmpty] = useState(props.empty);
   const [visualText, setVisualText] = useState(linkify(text));
   const [edit, setEdit] = useState(false);
-  const [editText, setEditText] = useState(props.children.text);
+  const [editText, setEditText] = useState(props.text);
   const [hover, setHover] = useState(false);
   const [deleteConf, setDeleteConf] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const query = `?year=${props.children.year}&month=${props.children.month}&day=${props.children.day}`;
-  const permalink = `/days${query}`;
 
   const upsertDay = async(e) => {
     e.preventDefault();
@@ -33,9 +30,9 @@ export default function Day(props) {
     };
 
     const body = {
-      year: props.children.year,
-      month: props.children.month,
-      day: props.children.day,
+      year: props.year,
+      month: props.month,
+      day: props.day,
       text: editText
     };
 
@@ -60,9 +57,9 @@ export default function Day(props) {
     e.preventDefault();
 
     const body = {
-      year: props.children.year,
-      month: props.children.month,
-      day: props.children.day
+      year: props.year,
+      month: props.month,
+      day: props.day
     };
 
     await fetch('/api/days', {
@@ -87,7 +84,7 @@ export default function Day(props) {
   } else {
     dayClass += ' mt-6';
   }
-  if (isToday(props.children.year, props.children.month, props.children.day)) {
+  if (isToday(props.year, props.month, props.day)) {
     dayClass += ' today'
   }
 
@@ -96,35 +93,31 @@ export default function Day(props) {
       className={dayClass}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      key={props.children._id}>
-      <div className="column" key={props.children._id + '-date'}>
+      key={props._id}>
+      <div key="day-date-section" className="column" key={props._id + '-date'}>
         <div className={empty ? "content has-text-weight-semibold is-size-6" : "content has-text-weight-semibold is-size-5"}>
-          <span className="content has-text-primary">{props.children.year}</span>
-          <span className="content mx-1 has-text-warning">.</span>
-          <span className="content has-text-primary">{zeros(props.children.month)}</span>
-          <span className="content mx-1 has-text-warning">.</span>
-          <span className="content has-text-primary">{zeros(props.children.day)}</span>
+          <span className="content has-text-primary is-size-4">{props.year}-{zeros(props.month)}-{zeros(props.day)}</span>
           <br />
           <span className="has-text-primary has-text-weight-light is-size-6">
-            {weekday(props.children.weekday)}
+            {weekday(props.weekday)}
           </span>
         </div>
       </div>
-      <div className="column is-three-quarters has-text-weight-medium" style={dayTextStyle} key={props.children._id + '-content'}>
+      <div key="day-text-section" className="column is-three-quarters has-text-weight-medium" style={dayTextStyle} key={props._id + '-content'}>
         {!edit &&
           <div className="content has-text-primary">
 
             {/* CONTENT HERE */}
-            <p className="day-text content has-text-weight-normal" dangerouslySetInnerHTML={{__html: visualText}}></p>
+            <p className="day-text content has-text-weight-normal is-size-5" dangerouslySetInnerHTML={{__html: visualText}}></p>
             {/* END CONTENT */}
 
             <div className={hover ? '' : 'is-invisible-desktop'} style={controlsStyle}>
               <div className="columns buttons are-small has-text-weight-semibold">
-                <div className="column is-one-fifth">
+                <div key="day-button-section-edit" className="column is-one-fifth">
                   <a className="button is-info is-fullwidth" onClick={e => setEdit(true)}>✏️</a>
                 </div>
 
-                <div className="column is-one-fifth">
+                <div key="day-button-section-delete" className="column is-one-fifth">
                   {!empty &&
                     <div>
                     {deleteConf &&
@@ -136,7 +129,7 @@ export default function Day(props) {
                     </div>
                   }
                 </div>
-                <div className="column is-one-fifth">
+                <div key="day-button-section-delete-confirm" className="column is-one-fifth">
                   {deleteConf &&
                     <a className="button is-info" onClick={e => setDeleteConf(false)}>🙅‍♀️ nvm</a>
                   }
@@ -149,7 +142,7 @@ export default function Day(props) {
           <form>
             <div className="field">
               <textarea
-                className="day-textarea textarea content has-text-weight-normal has-text-primary"
+                className="day-textarea textarea content has-text-weight-normal has-text-primary is-size-5"
                 rows="12"
                 value={editText}
                 onChange={e => setEditText(e.target.value)}>

@@ -109,7 +109,24 @@ export default async (req, res) => {
         .toArray();
 
       return res.json(days);
+    } else if (req.query.page) {
+      if (isNaN(parseInt(req.query.page))) return res.status(400).json({ message: '&page is not an integer' });
+      if (parseInt(req.query.page) < 1) return res.status(400).json({ message: '&page must be >= 1' });
 
+      const limit = 30;
+      const skip = (parseInt(req.query.page) - 1) * limit;
+      const params = {
+        userId: ObjectID(session.userId)
+      };
+
+      const days = await db.collection('days')
+        .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0, date: 0 }})
+        .sort({ year: -1, month: -1, day: -1 })
+        .skip(skip)
+        .limit(limit)
+        .toArray();
+
+      return res.json(days);
     } else {
       let params = {
         userId: ObjectID(session.userId)

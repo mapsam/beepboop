@@ -72,6 +72,16 @@ export function isToday(y, m, d) {
   return moment().format('YYYY-M-D') === `${y}-${m}-${d}`;
 }
 
+export function today() {
+  const m = moment();
+  return {
+    day: m.date(),
+    month: m.month() + 1,
+    year: m.year(),
+    weekday: m.day()
+  }
+}
+
 export function fillDays(list, start, end) {
   const range = moment.range(start, end);
 

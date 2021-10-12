@@ -1,16 +1,25 @@
 @charset "utf-8";
 
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,700;1,400;1,700&display=swap');
-$family-primary: 'Lora', serif
+@import url('https://fonts.googleapis.com/css2?family=Inconsolata:wght@300;400;700&display=swap');
+$family-primary: 'Inconsolata', monospace;
 
 // colors
-$dark: #1e1226
-$darker: #100b13
-$semi-dark: #422e4f
-$primary: #eeeeee
-$info: $semi-dark
-$link: #a5a0a8
-$link-hover: #e8e7e9
+$dark: #121212
+$darker: #000000
+$semi-dark: #666666
+$primary: #EEEEEE
+$info: $darker
+$link: #FFFFFF
+$link-hover: #999999
+
+// font sizes
+$size-1: 3rem
+$size-2: 2.5rem
+$size-3: 2rem
+$size-4: 1.5rem
+$size-5: 1.25rem
+$size-6: 1rem
+$size-7: 0.75rem
 
 *::-webkit-clear-button
   display: none
@@ -68,13 +77,6 @@ input:focus
   box-shadow: none !important
   resize: none !important
   background: $darker !important
-
-.today
-  font-size: 1.14em
-  .day-text
-    font-size: 1.14em
-
-.day-container
 
 // import bulma
 @import "bulma"
