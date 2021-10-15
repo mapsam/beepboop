@@ -77,9 +77,11 @@ Request body:
 }
 ```
 
-### `GET /accounts/<account>`
+### `GET /account`
 
-Get a single account. Returns the full account object from the database. Example account object:
+Get a single account or download account data.
+
+A request without query parameters will return the full account object from the database. Example account object:
 
 ```JSON
 {
@@ -91,3 +93,5 @@ Get a single account. Returns the full account object from the database. Example
   "updatedAt": 1605982254639
 }
 ```
+
+A request with the `?download` query parameter will download all data in the format specified. Values can be `json` or `csv`. The response includes the `Content-Disposition: attachment; filename=` header, which signals the client to download the response as a file.

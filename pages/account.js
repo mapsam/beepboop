@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useSession, signOut } from 'next-auth/client';
 import { useRouter } from 'next/router';
+import Link from 'next/link';
 
 export default function Account () {
   const [ session, loading ] = useSession();
@@ -8,21 +9,18 @@ export default function Account () {
 
   const [ name, setName ] = useState();
   const [ email, setEmail ] = useState();
-  const [ img, setImg ] = useState();
-  const [ showToken, setShowToken ] = useState(false);
 
   // Fetch content from protected route
   useEffect(() => {
     const fetchData = async () => {
-      const res = await fetch('/api/accounts/abcd')
-      const json = await res.json()
+      const res = await fetch('/api/account');
+      const json = await res.json();
       if (json) {
         setEmail(json.email);
         setName(json.name);
-        setImg(json.image);
       }
     }
-    fetchData()
+    fetchData();
   });
 
   // When rendering client side don't display anything until loading is complete
@@ -36,7 +34,7 @@ export default function Account () {
     <div className="is-size-5">
       <div className="block content">
         <h1 className="has-text-primary has-text-weight-bold title">Account</h1>
-        <p class="has-text-primary block">
+        <p className="has-text-primary block">
           This is your account page. You can view your account settings, logout, download
           your account data, or delete your account.</p>
       </div>
@@ -46,7 +44,7 @@ export default function Account () {
           <h2 className="is-size-5 has-text-weight-semibold has-text-primary">Settings</h2>
         </div>
         <div className="column content is-three-quarters">
-          <p class="block has-text-primary">
+          <p className="block has-text-primary">
             Account settings are defined by the identify provider you used to sign in.
             If you want to edit these you must make changes in that service.
           </p>
@@ -60,9 +58,9 @@ export default function Account () {
           <h2 className="is-size-5 has-text-weight-semibold has-text-primary">Data</h2>
         </div>
         <div className="column content is-three-quarters">
-          <p className="has-text-primary"><span className="underline has-text-weight-semibold">Download account data.</span> This will download <span class="is-italic">all</span> days associated to your account.</p>
-          <button class="button is-info has-text-weight-semibold mr-2 " onClick={signOut} disabled>CSV</button>
-          <button class="button is-info has-text-weight-semibold mr-2 " onClick={signOut} disabled>JSON</button>
+          <p className="has-text-primary"><span className="underline has-text-weight-semibold">Download account data.</span> This will download <span className="is-italic">all</span> days associated to your account.</p>
+          <Link href="/api/account?download=json"><a className="button is-info has-text-weight-semibold mr-2">JSON</a></Link>
+          <Link href="/api/account?download=csv"><a className="button is-info has-text-weight-semibold mr-2">CSV</a></Link>
         </div>
       </div>
 
@@ -73,12 +71,12 @@ export default function Account () {
         <div className="column content is-three-quarters">
           <div className="block">
             <p className="has-text-primary"><span className="underline has-text-weight-semibold">Logout</span> of your current session.</p>
-            <button class="button is-ghost " onClick={signOut}>Logout</button>
+            <button className="button is-ghost " onClick={signOut}>Logout</button>
           </div>
 
           <div className="block">
             <p className="has-text-primary"><span className="underline has-text-weight-semibold">Delete your account.</span> This is a permanent action! If you want a record of your data, be sure to download it before deleting your account.</p>
-            <button class="button is-danger has-text-weight-bold" onClick={signOut} disabled>Delete account</button>
+            <button className="button is-danger has-text-weight-bold" onClick={signOut} disabled>Delete account</button>
           </div>
         </div>
       </div>
