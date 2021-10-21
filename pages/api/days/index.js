@@ -68,7 +68,8 @@ export default async (req, res) => {
       year: +req.body.year,
       month: +req.body.month,
       day: +req.body.day,
-      text: req.body.text
+      text: req.body.text,
+      weekday: d.getDay()
     });
 
   // remove day
@@ -105,7 +106,7 @@ export default async (req, res) => {
 
       const days = await db.collection('days')
         .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0, date: 0 }})
-        .sort({ year: -1, month: -1, day: -1 })
+        .sort({ date: -1 })
         .toArray();
 
       return res.json(days);
@@ -121,7 +122,7 @@ export default async (req, res) => {
 
       const days = await db.collection('days')
         .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0, date: 0 }})
-        .sort({ year: -1, month: -1, day: -1 })
+        .sort({ date: -1 })
         .skip(skip)
         .limit(limit)
         .toArray();
@@ -139,7 +140,7 @@ export default async (req, res) => {
 
       const days = await db.collection('days')
         .find(params, { projection: { createdAt: 0, updatedAt: 0, _id: 0, userId: 0 }})
-        .sort({ year: -1, month: -1, day: -1 })
+        .sort({ date: -1 })
         .toArray();
 
       return res.json(days);

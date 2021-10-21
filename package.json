@@ -27,7 +27,7 @@
   "homepage": "https://github.com/mapsam/beepboop#readme",
   "dependencies": {
     "@zeit/next-sass": "^1.0.1",
-    "bulma": "^0.9.1",
+    "bulma": "^0.9.3",
     "json-2-csv": "^3.14.4",
     "moment": "^2.29.1",
     "moment-range": "^4.0.2",

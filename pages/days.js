@@ -1,6 +1,7 @@
 import Day from '../components/Day.js';
+import New from '../components/New.js';
+import { isToday } from '../utils/date.js';
 import { connectToDatabase } from '../utils/mongodb.js';
-import { today, isToday } from '../utils/date.js';
 import { getSession, useSession } from 'next-auth/client';
 import { useRouter } from 'next/router';
 import { useState } from 'react'
@@ -23,24 +24,24 @@ export async function getServerSideProps(context) {
     .limit(30)
     .toArray();
 
-  // add "today" if it doesn't already exist in database
-  // this is how users are able to record "today" for starters
-  if (!isToday(days[0].year, days[0].month, days[0].day)) {
-    const filler = today();
-    filler._empty = true;
-    days.unshift(filler);
-  }
-
   return { props: { days } };
 }
 
-export default function Page ({ days }) {
+export default function Days({ days }) {
   const router = useRouter();
   const [ session, loading ] = useSession();
   const [ ds, setDays ] = useState(days);
   const [ page, setPage ] = useState(2);
   const [ loadingDays, setLoadingDays ] = useState(false);
   const [ noMoreDays, setNoMoreDays ] = useState(false);
+  const [ hasTodayEntry, setHasTodayEntry ] = useState(isToday(ds[0]));
+
+  function addNewEntry(entry) {
+    const newDays = [...ds];
+    newDays.unshift(entry);
+    setDays(newDays);
+    setHasTodayEntry(true);
+  }
 
   async function loadMoreDays(e) {
     e.preventDefault();
@@ -54,7 +55,6 @@ export default function Page ({ days }) {
     });
 
     const res = await response.json();
-    console.log(res);
 
     if (!res.length) {
       setNoMoreDays(true);
@@ -70,19 +70,26 @@ export default function Page ({ days }) {
   if (loading && !session) router.push('/');
 
   return (
-    <div className="days-all">
-      {ds.map((day) => (
-        <Day
-          _id={day._id}
-          empty={day._empty}
-          text={day.text}
-          year={day.year}
-          month={day.month}
-          day={day.day}
-          weekday={day.weekday} />
-      ))}
+    <div>
+      <div key="add-new-day">
+        <New
+          hasEntry={hasTodayEntry}
+          submit={addNewEntry} />
+      </div>
 
-      <div className="content has-text-primary has-text-centered">
+      <div className="days-all">
+        {ds.map((day) => (
+          <Day
+            empty={day._empty}
+            text={day.text}
+            year={day.year}
+            month={day.month}
+            day={day.day}
+            weekday={day.weekday} />
+        ))}
+      </div>
+
+      <div key="get-more-days" className="content has-text-primary has-text-centered">
         {noMoreDays &&
           <p>✋ No more days!</p>
         }

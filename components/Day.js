@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { weekday, zeros, isToday } from '../utils/date.js';
 import { linkify } from '../utils/linkify.js';
 
@@ -12,6 +12,7 @@ const controlsStyle = {
 };
 
 export default function Day(props) {
+  const id = `${props.year}-${props.month}-${props.day}`;
   const [text, setText] = useState(props.text);
   const [empty, setEmpty] = useState(props.empty);
   const [visualText, setVisualText] = useState(linkify(text));
@@ -20,6 +21,16 @@ export default function Day(props) {
   const [hover, setHover] = useState(false);
   const [deleteConf, setDeleteConf] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // reset text if props.text is updated
+  // which typically happens when the user adds a
+  // new day with the <New /> component from
+  // within the days.js page.
+  useEffect(() => {
+    setText(props.text);
+    setVisualText(linkify(props.text));
+    setEditText(props.text);
+  }, [props.text]);
 
   const upsertDay = async(e) => {
     e.preventDefault();
@@ -89,12 +100,16 @@ export default function Day(props) {
   }
 
   return (
+    // <div>
+    //   {props.year}-{props.month}-{props.day}<br />
+    //   {props.text}
+    // </div>
     <div
       className={dayClass}
       onMouseEnter={() => setHover(true)}
       onMouseLeave={() => setHover(false)}
-      key={props._id}>
-      <div key="day-date-section" className="column" key={props._id + '-date'}>
+      key={`${id}-container`}>
+      <div className="column" key={`${id}-date`}>
         <div className={empty ? "content has-text-weight-semibold is-size-6" : "content has-text-weight-semibold is-size-5"}>
           <span className="content has-text-primary is-size-4">{props.year}-{zeros(props.month)}-{zeros(props.day)}</span>
           <br />
@@ -103,16 +118,16 @@ export default function Day(props) {
           </span>
         </div>
       </div>
-      <div key="day-text-section" className="column is-three-quarters has-text-weight-medium" style={dayTextStyle} key={props._id + '-content'}>
+      <div className="column is-three-quarters has-text-weight-medium" style={dayTextStyle} key={`${id}-content`}>
         {!edit &&
           <div className="content has-text-primary">
 
             {/* CONTENT HERE */}
-            <p className="day-text content has-text-weight-normal is-size-5" dangerouslySetInnerHTML={{__html: visualText}}></p>
+            <p key={`${id}-text-content`} className="day-text content has-text-weight-normal is-size-5" dangerouslySetInnerHTML={{__html: visualText}}></p>
             {/* END CONTENT */}
 
             <div className={hover ? '' : 'is-invisible-desktop'} style={controlsStyle}>
-              <div className="columns buttons are-small has-text-weight-semibold">
+              <div className="columns buttons has-text-weight-semibold">
                 <div key="day-button-section-edit" className="column is-one-fifth">
                   <a className="button is-info is-fullwidth" onClick={e => setEdit(true)}>✏️</a>
                 </div>
@@ -131,7 +146,7 @@ export default function Day(props) {
                 </div>
                 <div key="day-button-section-delete-confirm" className="column is-one-fifth">
                   {deleteConf &&
-                    <a className="button is-info" onClick={e => setDeleteConf(false)}>🙅‍♀️ nvm</a>
+                    <a className="button is-info" onClick={e => setDeleteConf(false)}>🙅‍♀️ cancel</a>
                   }
                 </div>
               </div>
@@ -148,7 +163,7 @@ export default function Day(props) {
                 onChange={e => setEditText(e.target.value)}>
               </textarea>
             </div>
-            <div className="buttons are-small">
+            <div className="buttons">
               <button
                 type="submit"
                 className={loading ? "button is-info has-text-weight-semibold is-loading" : "button is-info has-text-weight-semibold"}
@@ -156,7 +171,7 @@ export default function Day(props) {
               </button>
               <button
                 className="button is-info has-text-weight-semibold"
-                onClick={e => setEdit(false)}>🙅‍♀️ nvm
+                onClick={e => setEdit(false)}>🙅‍♀️ cancel
               </button>
             </div>
           </form>

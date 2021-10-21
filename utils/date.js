@@ -68,8 +68,9 @@ export function zeros(i) {
   return i;
 }
 
-export function isToday(y, m, d) {
-  return moment().format('YYYY-M-D') === `${y}-${m}-${d}`;
+export function isToday({ year, month, day }) {
+  console.log('isToday', year, month, day);
+  return moment().format('YYYY-M-D') === `${year}-${month}-${day}`;
 }
 
 export function today() {
